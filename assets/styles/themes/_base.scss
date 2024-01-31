@@ -1,0 +1,10 @@
+html, .T-body
+{
+    height: 100%;
+}
+
+.T-body
+{
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}

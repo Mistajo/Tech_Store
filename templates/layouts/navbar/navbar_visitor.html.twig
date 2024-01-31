@@ -1,0 +1,140 @@
+<nav class="navbar navbar-expand-lg bg-secondary">
+	<div class="container-fluid">
+		<a class="navbar-brand col-md-3 col-lg-2 my-1 fs-6 ms-auto" href="{{path('visitor.welcome.index')}}">
+			<img class=" w-75 h-75 ms-auto rounded-4" src="{{asset("logo/Tech_Store_Logo.png")}}" alt="Tech Store logo">
+
+		</a>
+		<button class="navbar-toggler bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mb-2 mb-lg-0">
+				<li class="nav-item">
+					<a class="nav-link active" aria-current="page" href="#">PC Portables</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">PC de Bureau</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Ecrans</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Imprimantes</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Encre & Toner</a>
+				</li>
+				<li class="nav-item dropdown me-2">
+					<a href="" class="nav-link" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+						Accessoires
+					</a>
+					<ul class="dropdown-menu dropdown-menu-start" style="left: -75px;">
+						<li class="dropdown-item ms-0">
+							<a href="#" class=" text-decoration-none my-3 my-lg-0">Souris</a>
+						</li>
+						<li class="dropdown-item ms-0">
+							<a href="#" class="text-decoration-none my-3 my-lg-0">Claviers</a>
+						</li>
+						<li class="dropdown-item ms-0">
+							<a href="#" class="text-decoration-none my-3 my-lg-0">Papiers</a>
+						</li>
+					</ul>
+				</li>
+
+				<form class="d-flex ms-5 " role="search">
+					<input class="form-control me-2" type="search" placeholder="Que cherchez-vous?" aria-label="Search">
+					<div class='d-flex'>
+						<button class="btn btn-outline-success text-white mx-1" type="submit">
+							<i class="fa-solid fa-magnifying-glass" title='Rechercher'></i>
+						</button>
+						<button class="btn btn-outline-danger text-white mx-1" type="submit">
+							<i class="fa-solid fa-delete-left" title="Effacer"></i>
+						</button>
+					</div>
+				</form>
+			</ul>
+
+
+			<div class="ms-auto">
+				{% if app.user %}
+					<ul class="navbar-nav ms-1">
+						<li class="nav-item dropdown">
+							<a href="" class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+								<i class="fa-solid fa-user-secret"></a>
+								Bonjour,
+								{# {{app.user.firstName}}</i> #}
+								<ul class="dropdown-menu ">
+									{% if is_granted('ROLE_ADMIN') %}
+										<li>
+											<a class="dropdown-item" href="#">Mon Profil</a>
+										</li>
+										<li><hr class="dropdown-divider"></li>
+
+										<li>
+											<a class="dropdown-item" href="#">Espace Admin</a>
+										</li>
+										<li>
+											<a class="dropdown-item" href="#">Paramètre du Site</a>
+										</li>
+									{% elseif is_granted('ROLE_USER') %}
+										<li>
+											<a class="dropdown-item" href="#">Mon Profil</a>
+										</li>
+									{% endif %}
+									<li>
+										<a class="dropdown-item" href="#">Espace Utilisateur</a>
+									</li>
+									<li>
+										<a class="dropdown-item" href="#">Déconnexion</a>
+									</li>
+								</ul>
+							</li>
+						</li>
+					</ul>
+				{% else %}
+					<ul class="navbar-nav me-3">
+						<li class="nav-item dropdown me-3">
+							<a href="#" class="nav-link text-white" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+								<i class="fa-solid fa-headset" style="font-size: 1.5rem;"></i>
+							</a>
+							<ul class="dropdown-menu bg-secondary dropdown-menu-start" style="left: -75px;">
+								<li class="dropdown-item ms-0">
+									<a href="#" class="text-decoration-none my-3 my-lg-0">Contactez-nous</a>
+								</li>
+							</ul>
+						</li>
+
+						<li class="nav-item dropdown me-3">
+							<a href="" class="nav-link text-white" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+								<i class="fa-solid fa-user" style="font-size: 1.5rem;"></i>
+							</a>
+							<ul class="dropdown-menu bg-secondary dropdown-menu-start" style="left: -100px;">
+								<h4 class='text-center'>Bonjour,</h4>
+								<li class="dropdown-item me-5 ms-0">
+									<a href="{{path('visitor.authentication.login')}}" class="btn btn-primary">SE CONNECTER</a>
+								</li>
+								<div>
+									<p class='text-center mt-2'>Nouveau chez TechShop ?</p>
+									<li class="dropdown-item me-5 ms-0">
+										<a href="{{path('visitor.registration.register')}}" class="btn btn-light">CREER UN COMPTE</a>
+									</li>
+								</div>
+							</ul>
+						</li>
+						<li class="nav-item dropdown me-3">
+							<a href="" class="nav-link text-white" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+								<i class="fa-solid fa-cart-shopping" style="font-size: 1.5rem;"></i>
+							</a>
+							<ul class="dropdown-menu me-5 bg-secondary " style="left: -80px;">
+								<p class="text-primary">Votre panier est vide</p>
+							</ul>
+						</li>
+					</ul>
+				{% endif %}
+			</div>
+
+		</div>
+
+	</div>
+</nav>
