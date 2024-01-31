@@ -61,80 +61,80 @@
 					<ul class="navbar-nav ms-1">
 						<li class="nav-item dropdown">
 							<a href="" class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
-								<i class="fa-solid fa-user-secret"></a>
-								Bonjour,
-								{# {{app.user.firstName}}</i> #}
-								<ul class="dropdown-menu ">
-									{% if is_granted('ROLE_ADMIN') %}
-										<li>
-											<a class="dropdown-item" href="#">Mon Profil</a>
-										</li>
-										<li><hr class="dropdown-divider"></li>
+								<i class="fa-solid fa-user-secret"></i>
+							</a>
+							Bonjour,
+							{# {{app.user.firstName}}</i> #}
+							<ul class="dropdown-menu ">
+								{% if is_granted('ROLE_ADMIN') %}
+									<li>
+										<a class="dropdown-item" href="#">Mon Profil</a>
+									</li>
+									<li><hr class="dropdown-divider"></li>
 
-										<li>
-											<a class="dropdown-item" href="#">Espace Admin</a>
-										</li>
-										<li>
-											<a class="dropdown-item" href="#">Paramètre du Site</a>
-										</li>
-									{% elseif is_granted('ROLE_USER') %}
-										<li>
-											<a class="dropdown-item" href="#">Mon Profil</a>
-										</li>
-									{% endif %}
 									<li>
-										<a class="dropdown-item" href="#">Espace Utilisateur</a>
+										<a class="dropdown-item" href="#">Espace Admin</a>
 									</li>
 									<li>
-										<a class="dropdown-item" href="#">Déconnexion</a>
+										<a class="dropdown-item" href="#">Paramètre du Site</a>
 									</li>
-								</ul>
+								{% elseif is_granted('ROLE_USER') %}
+									<li>
+										<a class="dropdown-item" href="#">Mon Profil</a>
+									</li>
+								{% endif %}
+								<li>
+									<a class="dropdown-item" href="#">Espace Utilisateur</a>
+								</li>
+								<li>
+									<a class="dropdown-item" href="{{path('app.logout')}}">Déconnexion</a>
+
+								</li>
+							</ul>
+						</li>
+					</li>
+				</ul>
+			{% else %}
+				<ul class="navbar-nav me-3">
+					<li class="nav-item dropdown me-3">
+						<a href="#" class="nav-link text-white" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+							<i class="fa-solid fa-headset" style="font-size: 1.5rem;"></i>
+						</a>
+						<ul class="dropdown-menu bg-secondary dropdown-menu-start" style="left: -75px;">
+							<li class="dropdown-item ms-0">
+								<a href="#" class="text-decoration-none my-3 my-lg-0">Contactez-nous</a>
 							</li>
-						</li>
-					</ul>
-				{% else %}
-					<ul class="navbar-nav me-3">
-						<li class="nav-item dropdown me-3">
-							<a href="#" class="nav-link text-white" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
-								<i class="fa-solid fa-headset" style="font-size: 1.5rem;"></i>
-							</a>
-							<ul class="dropdown-menu bg-secondary dropdown-menu-start" style="left: -75px;">
-								<li class="dropdown-item ms-0">
-									<a href="#" class="text-decoration-none my-3 my-lg-0">Contactez-nous</a>
-								</li>
-							</ul>
-						</li>
-
-						<li class="nav-item dropdown me-3">
-							<a href="" class="nav-link text-white" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
-								<i class="fa-solid fa-user" style="font-size: 1.5rem;"></i>
-							</a>
-							<ul class="dropdown-menu bg-secondary dropdown-menu-start" style="left: -100px;">
-								<h4 class='text-center'>Bonjour,</h4>
+						</ul>
+					</li>
+					<li class="nav-item dropdown me-3">
+						<a href="" class="nav-link text-white" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+							<i class="fa-solid fa-user" style="font-size: 1.5rem;"></i>
+						</a>
+						<ul class="dropdown-menu bg-secondary dropdown-menu-start" style="left: -100px;">
+							<h4 class='text-center'>Bonjour,</h4>
+							<li class="dropdown-item me-5 ms-0">
+								<a href="{{path('visitor.authentication.login')}}" class="btn btn-primary">SE CONNECTER</a>
+							</li>
+							<div>
+								<p class='text-center mt-2'>Nouveau chez TechShop ?</p>
 								<li class="dropdown-item me-5 ms-0">
-									<a href="{{path('visitor.authentication.login')}}" class="btn btn-primary">SE CONNECTER</a>
+									<a href="{{path('visitor.registration.register')}}" class="btn btn-light">CREER UN COMPTE</a>
 								</li>
-								<div>
-									<p class='text-center mt-2'>Nouveau chez TechShop ?</p>
-									<li class="dropdown-item me-5 ms-0">
-										<a href="{{path('visitor.registration.register')}}" class="btn btn-light">CREER UN COMPTE</a>
-									</li>
-								</div>
-							</ul>
-						</li>
-						<li class="nav-item dropdown me-3">
-							<a href="" class="nav-link text-white" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
-								<i class="fa-solid fa-cart-shopping" style="font-size: 1.5rem;"></i>
-							</a>
-							<ul class="dropdown-menu me-5 bg-secondary " style="left: -80px;">
-								<p class="text-primary">Votre panier est vide</p>
-							</ul>
-						</li>
-					</ul>
-				{% endif %}
-			</div>
-
+							</div>
+						</ul>
+					</li>
+					<li class="nav-item dropdown me-3">
+						<a href="" class="nav-link text-white" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+							<i class="fa-solid fa-cart-shopping" style="font-size: 1.5rem;"></i>
+						</a>
+						<ul class="dropdown-menu me-5 bg-secondary " style="left: -80px;">
+							<p class="text-primary">Votre panier est vide</p>
+						</ul>
+					</li>
+				</ul>
+			{% endif %}
 		</div>
 
 	</div>
-</nav>
+
+</div></nav>

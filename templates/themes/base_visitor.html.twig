@@ -55,17 +55,18 @@
 
 
 		{# Chargement de bootstrap et de ma feuille de style #}
-		{% block stylesheets %}
+		{% block webpack_encore_stylesheets %}
 			{{ encore_entry_link_tags('app') }}
 		{% endblock %}
 
 		{# Chargement du js #}
-		{% block javascripts %}
+		{% block webpack_encore_javascripts %}
 			{{ encore_entry_script_tags('app') }}
 			{% block importmap %}
 				{{ importmap('app') }}
 			{% endblock %}
 		{% endblock %}
+
 	</head>
 	<body
 		class='T-body'>
