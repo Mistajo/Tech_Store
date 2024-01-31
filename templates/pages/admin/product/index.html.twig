@@ -1,0 +1,71 @@
+{% extends 'themes/base_admin.html.twig' %}
+
+{% block title %}
+	- Admin - Liste Produits
+{% endblock %}
+
+{% block description %}
+	<meta name="description" content="Bienvenue sur la liste des produits. ">
+{% endblock %}
+
+{% block jQuery %}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+
+
+{% block main %}
+	<h1 class="text-center my-3 display-5">Liste des catégories</h1>
+
+	{% for message in app.flashes('success') %}
+		<div class="text-center alert alert-success alert-dismissible fade show" role="alert">
+			{{message}}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+
+	{% for message in app.flashes('warning') %}
+		<div class="text-center alert alert-warning alert-dismissible fade show" role="alert">
+			{{message}}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+	<div class="container">
+		<div class="d-flex justify-content-end align-items-center my-3">
+			<a href="{{path('admin.category.create')}}" class="btn btn-primary shadow">
+				<i class="fa-solid fa-plus"></i>
+				Nouveau Produit</a>
+		</div>
+		<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-9">
+				<div class="card mb-3">
+					<div class="row g-0">
+						<div class="col-md-4">
+							<img src="..." class="img-fluid rounded-start" alt="...">
+						</div>
+						<div class="col-md-4">
+							<div class="card-body">
+								<h5 class="card-title">Card title</h5>
+								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+								<p class="card-text">
+									<small class="text-body-secondary">Last updated 3 mins ago</small>
+								</p>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="card-body">
+								<h5 class="card-title">Card title</h5>
+								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
+		</div>
+	</div>
+
+
+{% endblock %}
