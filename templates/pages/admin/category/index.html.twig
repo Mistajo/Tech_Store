@@ -1,5 +1,6 @@
 {% extends 'themes/base_admin.html.twig' %}
 
+
 {% block title %}
 	- Admin - Liste des catégories
 {% endblock %}
@@ -23,7 +24,7 @@ language: {
 url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json'
 },
 order: [
-[4, 'desc']
+[5, 'desc']
 ]
 });
 });
@@ -61,6 +62,8 @@ order: [
 					<th class='text-center'>Id</th>
 					<th class='text-center'>Name</th>
 					<th class='text-center'>Slug</th>
+					<th class='text-center'>Image</th>
+					<th class='text-center'>Description</th>
 					<th class='text-center'>Créé le</th>
 					<th class='text-center'>Modifiée le</th>
 					<th class='text-center'>Options</th>
@@ -72,8 +75,17 @@ order: [
 						<td>{{category.id}}</td>
 						<td>{{category.name}}</td>
 						<td>{{category.slug}}</td>
-						<td>{{category.createdAt|date('d-m-Y')}}</td>
-						<td>{{category.updatedAt|date('d-m-Y')}}</td>
+						<td>
+							{% if category.image %}
+								<img src="{{ vich_uploader_asset(category, 'imageFile') | imagine_filter('admin_category_thumbnail') }}" alt="{{ category.name }}">
+							{% else %}
+								<p>---</p>
+							{% endif %}
+						</td>
+						<td>{{category.description}}</td>
+
+						<td>{{category.createdAt|date('d-m-Y H:i:s')}}</td>
+						<td>{{category.updatedAt|date('d-m-Y H:i:s')}}</td>
 						<td>
 							<a title="Modifier" href="{{path('admin.category.edit', {'id': category.id})}}" class="text-secondary m-2">
 								<i class="fa-solid fa-pencil"></i>

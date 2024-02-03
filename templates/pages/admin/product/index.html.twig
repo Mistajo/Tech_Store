@@ -1,7 +1,8 @@
 {% extends 'themes/base_admin.html.twig' %}
 
+
 {% block title %}
-	- Admin - Liste Produits
+	- Admin - Les Produits
 {% endblock %}
 
 {% block description %}
@@ -14,7 +15,7 @@
 
 
 {% block main %}
-	<h1 class="text-center my-3 display-5">Liste des catégories</h1>
+	<h1 class="text-center my-3 display-5">Les Produits</h1>
 
 	{% for message in app.flashes('success') %}
 		<div class="text-center alert alert-success alert-dismissible fade show" role="alert">
@@ -31,41 +32,43 @@
 	{% endfor %}
 	<div class="container">
 		<div class="d-flex justify-content-end align-items-center my-3">
-			<a href="{{path('admin.category.create')}}" class="btn btn-primary shadow">
+			<a href="{{path('admin.product.create')}}" class="btn btn-primary shadow">
 				<i class="fa-solid fa-plus"></i>
 				Nouveau Produit</a>
 		</div>
 		<div class="row">
 			<div class="col-md-3"></div>
+
 			<div class="col-md-9">
-				<div class="card mb-3">
-					<div class="row g-0">
-						<div class="col-md-4">
-							<img src="..." class="img-fluid rounded-start" alt="...">
+				<div class="row">
+					{% for category in categories %}
+						<div class="col-md-4 mb-3">
+							<a class='text-decoration-none' href="">
+								<div class="card">
+									<div class="card-body">
+										<h5 class="card-title text-black">{{category.name}}</h5>
+										<p class="card-text text-black">{{category.description}}</p>
+										<p class="card-text text-black mb-2">
+											{% if category.image %}
+												<img src="{{ vich_uploader_asset(category, 'imageFile') | imagine_filter('admin_product_thumbnail') }}" class=' card-img' alt="{{ category.name }}">
+											{% else %}
+												<p>---</p>
+											{% endif %}
+										</p>
+										<a href="#" class="btn btn-primary">Go somewhere</a>
+									</div>
+								</div>
+							</a>
+
 						</div>
-						<div class="col-md-4">
-							<div class="card-body">
-								<h5 class="card-title">Card title</h5>
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<p class="card-text">
-									<small class="text-body-secondary">Last updated 3 mins ago</small>
-								</p>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="card-body">
-								<h5 class="card-title">Card title</h5>
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-							</div>
-						</div>
-					</div>
+					{% endfor %}
+
 				</div>
+
 
 			</div>
 
 
 		</div>
 	</div>
-
-
 {% endblock %}

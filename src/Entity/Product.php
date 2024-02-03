@@ -2,14 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Service\FileUploader;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProductRepository;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -81,13 +82,17 @@ class Product
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'products')]
     private Collection $category;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Image::class)]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Image::class,)]
     private Collection $images;
 
-    public function __construct()
+    private $fileUploader;
+
+
+    public function __construct(FileUploader $fileUploader)
     {
         $this->category = new ArrayCollection();
         $this->images = new ArrayCollection();
+        $this->fileUploader = $fileUploader;
     }
 
     public function getId(): ?int
@@ -227,7 +232,7 @@ class Product
     public function addImage(Image $image): static
     {
         if (!$this->images->contains($image)) {
-            $this->images->add($image);
+            $this->images[] = $image;
             $image->setProduct($this);
         }
 
@@ -236,12 +241,16 @@ class Product
 
     public function removeImage(Image $image): static
     {
-        if ($this->images->removeElement($image)) {
+        if ($this->images->contains($image)) {
+            $this->images->removeElement($image);
             // set the owning side to null (unless already changed)
             if ($image->getProduct() === $this) {
                 $image->setProduct(null);
             }
+
+            $this->fileUploader->remove($image->getFilename());
         }
+
 
         return $this;
     }

@@ -1,0 +1,99 @@
+{% extends 'themes/base_admin.html.twig' %}
+
+{% block title %}
+	- Admin - Liste des Produits
+{% endblock %}
+
+{% block description %}
+	<meta name="description" content="Bienvenue sur la liste des produits. ">
+{% endblock %}
+
+{% block jQuery %}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+
+
+{% block main %}
+	<h1 class="text-center my-3 display-5">Liste Des Produits</h1>
+
+	{% for message in app.flashes('success') %}
+		<div class="text-center alert alert-success alert-dismissible fade show" role="alert">
+			{{message}}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+
+	{% for message in app.flashes('warning') %}
+		<div class="text-center alert alert-warning alert-dismissible fade show" role="alert">
+			{{message}}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+	<div class="container">
+		<div class="d-flex justify-content-end align-items-center my-3">
+			<a href="{{path('admin.product.create')}}" class="btn btn-primary shadow">
+				<i class="fa-solid fa-plus"></i>
+				Nouveau Produit</a>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3"></div>
+
+			<div class="col-md-9">
+				<div class="row">
+					{% for product in products %}
+						<div class="col-md-9 mb-3 ms-auto">
+							<div class="card mb-3">
+								<div class="row g-0">
+									<div class="col-md-4">
+										{% set hasImage = false %}
+										{% for image in product.images %}
+											{% if not hasImage %}
+												<img src="{{ asset('uploads/images/' ~ image.getFilename()) }}" class="card-img" alt="{{ image.getFilename() }}">
+												{% set hasImage = true %}
+											{% endif %}
+										{% endfor %}
+									</div>
+									<div class="col-md-4">
+										<div class="card-body">
+											<h5 class="card-title">{{ product.name }}</h5>
+											<p class="card-text">{{ product.shortDescription|striptags|u.truncate(70, '...')|raw }}</p>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="card-body">
+											<h5 class="card-title">
+
+												{{ product.getPrice() }}
+												€
+											</h5>
+											<p class="card-text">
+												<a class="btn btn-primary my-1 rounded-3" href="{{path('admin.product.edit',{'id':product.id})}}">Modifier</a>
+												<a onclick="event.preventDefault(); return confirm('Attention!! Supprimer ce produit. Continuer ?') && document.querySelector('#form_delete_product_{{product.id}}').submit();" title="Supprimer" href="#" class="btn btn-danger my-1 rounded-3">
+													supprimer
+												</a>
+												<form method="POST" id="form_delete_product_{{product.id}}" action="{{path('admin.product.delete', {'id': product.id})}}">
+													<input type="hidden" name="csrf_token" value="{{csrf_token('delete_product_'~product.id)}}">
+													<input type="hidden" name="_method" value="DELETE">
+												</form>
+
+											</p>
+											<p>
+												<small class="text-muted">Last updated 3 mins ago</small>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+						</div>
+					{% endfor %}
+
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+{% endblock %}

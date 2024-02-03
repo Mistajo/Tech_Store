@@ -2,14 +2,17 @@
 
 namespace App\Form;
 
+use App\Entity\Image;
 use App\Entity\Product;
 use App\Entity\Category;
-use Doctrine\DBAL\Types\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\All;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -23,17 +26,20 @@ class ProductFormType extends AbstractType
             ->add('category', EntityType::class, [
                 // looks for choices from this entity
                 'class' => Category::class,
-                'placeholder' => 'Choisissez la catégorie',
-                // uses the User.username property as the visible option string
+
                 'choice_label' => 'name',
+
+                'multiple' => true,
             ])
-            ->add('images', CollectionType::class, [
-                'entry_type' => FileType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'delete_empty' => true,
-                'label' => 'Images (JPEG/PNG files)'
+            ->add('images', FileType::class, [
+                'multiple' => true,
+                'mapped' => false,
+                'by_reference' => false,
+                'attr' => [
+                    'class' => 'image-widget'
+                ],
             ])
+
             ->add('price', MoneyType::class, [
                 'currency' => 'EUR',
             ])
