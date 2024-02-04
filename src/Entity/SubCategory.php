@@ -2,9 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\SubCategoryRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -13,10 +11,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-#[UniqueEntity('name', message: "Cette catégorie existe déjà. Veuillez en choisir une autre.")]
-#[ORM\Entity(repositoryClass: CategoryRepository::class)]
+#[UniqueEntity('name', message: "Cette sous-catégorie existe déjà. Veuillez en choisir une autre.")]
+#[ORM\Entity(repositoryClass: SubCategoryRepository::class)]
 #[Vich\Uploadable]
-class Category
+class SubCategory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -48,7 +46,6 @@ class Category
     #[Vich\UploadableField(mapping: 'categories', fileNameProperty: 'image')]
     private ?File $imageFile = null;
 
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
@@ -57,28 +54,17 @@ class Category
         max: 500,
         maxMessage: 'La description ne doit pas dépasser {{ limit }} caractères.',
     )]
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\ManyToOne(inversedBy: 'subCategories')]
+    private ?Category $category = null;
+
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
-
-    #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'category')]
-    private Collection $products;
-
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: SubCategory::class)]
-    private Collection $subCategories;
-
-    public function __construct()
-    {
-        $this->products = new ArrayCollection();
-        $this->subCategories = new ArrayCollection();
-    }
 
 
     public function getId(): ?int
@@ -94,6 +80,30 @@ class Category
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }
@@ -135,34 +145,6 @@ class Category
     }
 
     /**
-     * @return Collection<int, Product>
-     */
-    public function getProducts(): Collection
-    {
-        return $this->products;
-    }
-
-    public function addProduct(Product $product): static
-    {
-        if (!$this->products->contains($product)) {
-            $this->products->add($product);
-            $product->addCategory($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): static
-    {
-        if ($this->products->removeElement($product)) {
-            $product->removeCategory($this);
-        }
-
-        return $this;
-    }
-
-
-    /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
      * of 'UploadedFile' is injected into this setter to trigger the update. If this
      * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
@@ -195,48 +177,6 @@ class Category
     public function setImage(?string $image): static
     {
         $this->image = $image;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): static
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, SubCategory>
-     */
-    public function getSubCategories(): Collection
-    {
-        return $this->subCategories;
-    }
-
-    public function addSubCategory(SubCategory $subCategory): static
-    {
-        if (!$this->subCategories->contains($subCategory)) {
-            $this->subCategories->add($subCategory);
-            $subCategory->setCategory($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSubCategory(SubCategory $subCategory): static
-    {
-        if ($this->subCategories->removeElement($subCategory)) {
-            // set the owning side to null (unless already changed)
-            if ($subCategory->getCategory() === $this) {
-                $subCategory->setCategory(null);
-            }
-        }
 
         return $this;
     }

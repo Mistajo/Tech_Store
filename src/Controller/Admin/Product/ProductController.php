@@ -162,7 +162,7 @@ class ProductController extends AbstractController
 
         if (empty($products)) {
 
-            $this->addFlash('warning', "Il n'y pas de produit dans cette catégorie");
+            $this->addFlash('warning', "Aucun produit dans cette catégorie");
         }
 
         return $this->render('pages/admin/product/pc_bureau.html.twig', [
@@ -177,7 +177,7 @@ class ProductController extends AbstractController
 
         if (empty($products)) {
 
-            $this->addFlash('warning', "Il n'y pas de produit dans cette catégorie");
+            $this->addFlash('warning', "Aucun produit dans cette catégorie");
         }
 
 
@@ -193,7 +193,7 @@ class ProductController extends AbstractController
 
         if (empty($products)) {
 
-            $this->addFlash('warning', "Il n'y pas de produit dans cette catégorie");
+            $this->addFlash('warning', "Aucun produit dans cette catégorie");
         }
 
 
@@ -209,7 +209,7 @@ class ProductController extends AbstractController
 
         if (empty($products)) {
 
-            $this->addFlash('warning', "Il n'y pas de produit dans cette catégorie");
+            $this->addFlash('warning', "Aucun produit dans cette catégorie");
         }
 
 
