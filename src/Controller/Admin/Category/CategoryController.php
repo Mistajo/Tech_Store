@@ -3,9 +3,12 @@
 namespace App\Controller\Admin\Category;
 
 use App\Entity\Category;
+use App\Entity\SubCategory;
 use App\Form\CategoryFormType;
+use App\Form\SubCategoryFormType;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\SubCategoryRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,11 +18,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class CategoryController extends AbstractController
 {
     #[Route('/category/list', name: 'admin.category.index')]
-    public function index(CategoryRepository $categoryRepository): Response
+    public function index(CategoryRepository $categoryRepository,): Response
     {
+
         $categories = $categoryRepository->findAll();
         return $this->render('pages/admin/category/index.html.twig', [
-            "categories" => $categories
+            "categories" => $categories,
+
         ]);
     }
 
@@ -46,15 +51,20 @@ class CategoryController extends AbstractController
     }
 
     #[Route('/catetory/{id}/edit', name: 'admin.category.edit', methods: ['GET', 'PUT'])]
-    public function edit(Category $category, Request $request, EntityManagerInterface $em): Response
+    public function edit($id, Category $category, Request $request, EntityManagerInterface $em, CategoryRepository $categoryRepository): Response
     {
+
+
         $form = $this->createForm(CategoryFormType::class, $category, [
-            "method" => "PUT"
+            "method" => "PUT",
+
         ]);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+
             $em->persist($category);
             $em->flush();
 

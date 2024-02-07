@@ -143,7 +143,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $lastLoginAt = null;
+    private ?\DateTime $lastLoginAt = null;
 
     public function __construct()
     {
@@ -341,12 +341,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getLastLoginAt(): ?\DateTimeImmutable
+    public function getLastLoginAt(): ?\DateTime
     {
         return $this->lastLoginAt;
     }
 
-    public function setLastLoginAt(?\DateTimeImmutable $lastLoginAt): static
+    public function setLastLoginAt(?\DateTime $lastLoginAt): static
     {
         $this->lastLoginAt = $lastLoginAt;
 

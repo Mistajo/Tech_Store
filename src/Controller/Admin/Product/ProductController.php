@@ -4,11 +4,13 @@ namespace App\Controller\Admin\Product;
 
 use App\Entity\Image;
 use App\Entity\Product;
+use App\Entity\SubCategory;
 use App\Form\ProductFormType;
 use App\Service\FileUploader;
 use App\Repository\ImageRepository;
 use App\Repository\ProductRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\SubCategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,7 +41,6 @@ class ProductController extends AbstractController
         ]);
     }
 
-
     #[Route('/product/create', name: 'admin.product.create', methods: ['GET', 'POST'])]
     public function create(Request $request, EntityManagerInterface $em, CategoryRepository $categoryRepository, FileUploader $fileUploader): Response
     {
@@ -48,9 +49,12 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('admin.category.index');
         }
         $product = new Product($fileUploader);
+
         $form = $this->createForm(ProductFormType::class, $product);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+
             $images = $form->get('images')->getData();
             foreach ($images as $image) {
                 $filename = $fileUploader->upload($image);
@@ -73,6 +77,7 @@ class ProductController extends AbstractController
     #[Route('/product/{id}/edit', name: 'admin.product.edit', methods: ['GET', 'PUT'])]
     public function edit(Product $product, Request $request, EntityManagerInterface $em, FileUploader $fileUploader): Response
     {
+
         $form = $this->createForm(ProductFormType::class, $product, [
             "method" => "PUT"
         ]);
@@ -80,6 +85,7 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
 
             // Gestion des images
             $images = $form->get('images')->getData();
@@ -140,7 +146,7 @@ class ProductController extends AbstractController
         return new JsonResponse(['success' => true]);
     }
 
-    #[Route('/product/pc-portables', name: 'admin.product_pc_portables.list')]
+    #[Route('/pc-portables', name: 'admin.product_pc_portables.list')]
     public function pcPortables(ProductRepository $productRepository)
     {
         $products = $productRepository->findByCategory('PC Portables');
@@ -155,7 +161,7 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/product/pc-de-bureau', name: 'admin.product_pc_bureau.list')]
+    #[Route('/pc-de-bureau', name: 'admin.product_pc_bureau.list')]
     public function pcBureau(ProductRepository $productRepository)
     {
         $products = $productRepository->findByCategory('PC de Bureau');
@@ -170,7 +176,7 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/product/ecrans', name: 'admin.product_ecran.list')]
+    #[Route('/ecrans', name: 'admin.product_ecran.list')]
     public function ecran(ProductRepository $productRepository)
     {
         $products = $productRepository->findByCategory('Ecrans');
@@ -186,7 +192,7 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/product/imprimantes', name: 'admin.product_imprimante.list')]
+    #[Route('/imprimantes', name: 'admin.product_imprimante.list')]
     public function imprimante(ProductRepository $productRepository)
     {
         $products = $productRepository->findByCategory('Imprimantes');
@@ -202,7 +208,7 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/product/encres_et_toners', name: 'admin.product_encre_toner.list')]
+    #[Route('/encre-et-toner', name: 'admin.product_encre_toner.list')]
     public function encresToner(ProductRepository $productRepository)
     {
         $products = $productRepository->findByCategory('Encre et Toner');
@@ -218,6 +224,43 @@ class ProductController extends AbstractController
         ]);
     }
 
+    #[Route('/souris', name: 'admin.product_souris.list')]
+    public function souris(ProductRepository $productRepository)
+    {
+        $products = $productRepository->findByCategory('Souris');
+
+
+        if (empty($products)) {
+
+            $this->addFlash('warning', "Aucun produit dans cette catégorie");
+        }
+
+
+        return $this->render('pages/admin/product/mousse.html.twig', [
+            'products' => $products,
+        ]);
+    }
+
+    #[Route('/claviers', name: 'admin.product_claviers.list')]
+    public function claviers(ProductRepository $productRepository,)
+    {
+        $products = $productRepository->findByCategory('Claviers');
+
+
+        if (empty($products)) {
+
+            $this->addFlash('warning', "Aucun produit dans cette catégorie");
+        }
+
+
+        return $this->render('pages/admin/product/keyboard.html.twig', [
+            'products' => $products,
+        ]);
+    }
+
+
+
+
     #[Route('/product/{id}/delete', name: 'admin.product.delete', methods: ['DELETE'])]
     public function delete(Product $product, Request $request, EntityManagerInterface $em): Response
     {
@@ -225,9 +268,9 @@ class ProductController extends AbstractController
             $em->remove($product);
             $em->flush();
 
-            $this->addFlash("success", "Cette catégorie ainsi que tous ses articles ont été supprimés.");
+            $this->addFlash("success", "Ce produit a été supprimé.");
         }
 
-        return $this->redirectToRoute('admin.product.index');
+        return $this->redirectToRoute('admin.product.list.index');
     }
 }

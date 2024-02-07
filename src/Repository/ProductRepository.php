@@ -54,4 +54,14 @@ class ProductRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findBySubCategory(string $subCategoryname)
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.subCategories', 'sc')
+            ->andWhere('sc.name = :subCategoryname')
+            ->setParameter('subCategoryname', $subCategoryname)
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -18,6 +18,8 @@
 	<script>
 		$(document).ready(function () {
 $('#product_form_category').select2();
+$('#product_form_subCategories').select2();
+
 });
 	</script>
 
@@ -50,6 +52,7 @@ $('#product_form_category').select2();
 						</div>
 					</div>
 				</div>
+
 				<div class="row">
 					<div class="col-md-6">
 						<div class="mb-3">
@@ -84,6 +87,7 @@ $('#product_form_category').select2();
 								{{ form_widget(form.shortDescription,{'attr' : {'class': 'form-control'}}) }}
 							</div>
 						</div>
+
 
 						<div class="col-md-6">
 							<div class="mb-3">

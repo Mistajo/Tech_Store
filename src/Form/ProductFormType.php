@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\Image;
 use App\Entity\Product;
 use App\Entity\Category;
+use App\Entity\SubCategory;
+use App\Repository\SubCategoryRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\All;
@@ -20,8 +22,10 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class ProductFormType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options,): void
     {
+
+
         $builder
             ->add('category', EntityType::class, [
                 // looks for choices from this entity

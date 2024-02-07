@@ -88,6 +88,9 @@ class Product
     private $fileUploader;
 
 
+
+
+
     public function __construct(FileUploader $fileUploader)
     {
         $this->category = new ArrayCollection();

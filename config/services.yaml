@@ -27,3 +27,6 @@ services:
     App\Service\FileUploader:
             arguments:
                 $targetDirectory: '%kernel.project_dir%/public/uploads/images'
+    App\EventListener\LoginListener:
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login' }

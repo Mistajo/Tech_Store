@@ -21,6 +21,7 @@
 				<div class="text-danger">{{form_errors(form.name) }}</div>
 				{{form_widget(form.name, {'attr': {'class': 'form-control'}})}}
 			</div>
+
 			<div class="mb-3">
 				<label for="category_form_image">Image :
 				</label>
@@ -28,7 +29,7 @@
 				{{form_widget(form.imageFile, {'attr': {'class': 'form-control'}})}}
 			</div>
 			<div class="mb-3">
-				<label for="category_form_description">Image :
+				<label for="category_form_description">Description :
 				</label>
 				<div class="text-danger">{{form_errors(form.description)}}</div>
 				{{form_widget(form.description, {'attr': {'class': 'form-control'}})}}

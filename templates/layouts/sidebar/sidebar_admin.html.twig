@@ -6,7 +6,7 @@
 		<div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
 			<ul class="nav flex-column">
 				<li class="nav-item">
-					<a class="nav-link active" href="{{path('admin.dashboard.index')}}">
+					<a class="nav-link active" href="{{path('admin.home.dashboard')}}">
 						<i class="fas fa-tachometer-alt"></i>
 						Tableau de bord
 					</a>
@@ -25,13 +25,6 @@
 					</a>
 				</li>
 
-				<li class="nav-item">
-					<a class="nav-link" href="{{path('admin.sub_category.index')}}">
-						<i class="fa-solid fa-layer-group"></i>
-						Sous-Categories
-					</a>
-				</li>
-
 				<li class="nav-item dropdown">
 					<a class="nav-link" href="{{path('admin.product.index')}}">
 						<i class="fas fa-tag"></i>
@@ -44,71 +37,70 @@
 								Tous Les Produits
 							</a>
 						</li>
-
+						<hr>
 						<li class="nav-item">
 							<a class="nav-link" href="{{path('admin.product_pc_portables.list')}}">
 								<i class="fa-solid fa-laptop"></i>
 								PC Portables
 							</a>
 						</li>
-
+						<hr>
 						<li class="nav-item">
 							<a class="nav-link" href="{{path('admin.product_pc_bureau.list')}}">
 								<i class="fa-solid fa-computer"></i>
 								PC de Bureau
 							</a>
 						</li>
-
+						<hr>
 						<li class="nav-item">
 							<a class="nav-link" href="{{path('admin.product_ecran.list')}}">
 								<i class="fa-solid fa-desktop"></i>
 								Ecrans
 							</a>
 						</li>
-
+						<hr>
 						<li class="nav-item">
 							<a class="nav-link" href="{{path('admin.product_imprimante.list')}}">
 								<i class="fa-solid fa-print"></i>
 								Imprimantes
 							</a>
 						</li>
-
+						<hr>
 						<li class="nav-item">
 							<a class="nav-link" href="{{path('admin.product_encre_toner.list')}}">
 								<i class="fa-solid fa-fill"></i>
 								Encre & Toner
 							</a>
 						</li>
-
-					</ul>
-				</li>
-
-				<li class="nav-item dropdown">
-					<a class="nav-link" href="#" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
-						<i class="fa-solid fa-diagram-successor"></i>
-						Accessoires
-					</a>
-					<ul class='dropdown-menu dropdown-menu-start'>
+						<hr>
 						<li class="nav-item list-unstyled">
 							<a class="nav-link" href="#">
 								<i class="fa-solid fa-computer-mouse"></i>
 								Souris
 							</a>
 						</li>
+
+						<hr>
+
 						<li class="nav-item list-unstyled">
 							<a class="nav-link" href="#">
 								<i class="fa-regular fa-keyboard"></i>
 								Claviers
 							</a>
 						</li>
+
+						<hr>
+
 						<li class="nav-item list-unstyled">
 							<a class="nav-link" href="#">
 								<i class="fa-regular fa-file-zipper"></i>
 								Papiers
 							</a>
 						</li>
+
 					</ul>
 				</li>
+
 				<li class="nav-item">
 					<a class="nav-link" href="#">
 						<i class="fas fa-users"></i>
@@ -134,6 +126,13 @@
 					<a class="nav-link" href="#">
 						<i class="fas fa-cog"></i>
 						Paramètres
+					</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="{{path('app.logout')}}">
+						<i class="fa-solid fa-right-from-bracket"></i>
+						Deconnexion
 					</a>
 				</li>
 

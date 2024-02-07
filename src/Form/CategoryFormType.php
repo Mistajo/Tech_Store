@@ -3,9 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Category;
+use App\Entity\SubCategory;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -33,6 +35,8 @@ class CategoryFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Category::class,
+            'sub_categories' => [],
+
         ]);
     }
 }
