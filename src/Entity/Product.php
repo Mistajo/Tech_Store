@@ -11,8 +11,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[Vich\Uploadable]
 class Product
 {
     #[ORM\Id]
@@ -82,20 +85,20 @@ class Product
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'products')]
     private Collection $category;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Image::class,)]
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Image::class, orphanRemoval: true, cascade: ["persist"])]
     private Collection $images;
 
-    private $fileUploader;
 
 
 
 
 
-    public function __construct(FileUploader $fileUploader)
+
+    public function __construct()
     {
         $this->category = new ArrayCollection();
         $this->images = new ArrayCollection();
-        $this->fileUploader = $fileUploader;
     }
 
     public function getId(): ?int
@@ -224,6 +227,9 @@ class Product
         return $this;
     }
 
+
+
+
     /**
      * @return Collection<int, Image>
      */
@@ -250,8 +256,6 @@ class Product
             if ($image->getProduct() === $this) {
                 $image->setProduct(null);
             }
-
-            $this->fileUploader->remove($image->getFilename());
         }
 
 

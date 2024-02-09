@@ -7,11 +7,13 @@ use App\Entity\Product;
 use App\Entity\SubCategory;
 use App\Form\ProductFormType;
 use App\Service\FileUploader;
+use App\Service\PictureService;
+use App\Service\ProductService;
 use App\Repository\ImageRepository;
 use App\Repository\ProductRepository;
 use App\Repository\CategoryRepository;
-use App\Repository\SubCategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\SubCategoryRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,40 +44,39 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/create', name: 'admin.product.create', methods: ['GET', 'POST'])]
-    public function create(Request $request, EntityManagerInterface $em, CategoryRepository $categoryRepository, FileUploader $fileUploader): Response
+    public function create(Request $request, EntityManagerInterface $em, CategoryRepository $categoryRepository, ProductService $productService): Response
     {
         if (count($categoryRepository->findAll()) == 0) {
             $this->addFlash("warning", "Vous devez créer au moins une catégorie avant de créer un produit.");
             return $this->redirectToRoute('admin.category.index');
         }
-        $product = new Product($fileUploader);
+        $product = new Product();
 
         $form = $this->createForm(ProductFormType::class, $product);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $files = $form->get('images')->getData();
 
-            $images = $form->get('images')->getData();
-            foreach ($images as $image) {
-                $filename = $fileUploader->upload($image);
-                $newImage = new Image();
-                $newImage->setFilename($filename);
-                $product->addImage($newImage);
-                $images = $product->getImages();
-                $em->persist($newImage);
+            $imageNames = $productService->uploadImages($files);
+
+            foreach ($imageNames as $imageName) {
+                $productService->createThumbnail($imageName);
             }
-            $em->persist($product);
-            $em->flush();
+
+            $productService->create($product, $imageNames);
+
             $this->addFlash('success', 'Le produit a été ajoutée avec succès.');
             return $this->redirectToRoute('admin.product.list.index');
         }
         return $this->render("pages/admin/product/create.html.twig", [
             'form' => $form->createView(),
+            'product' => $product,
         ]);
     }
 
     #[Route('/product/{id}/edit', name: 'admin.product.edit', methods: ['GET', 'PUT'])]
-    public function edit(Product $product, Request $request, EntityManagerInterface $em, FileUploader $fileUploader): Response
+    public function edit(Product $product, Request $request, EntityManagerInterface $em, ProductService $productService): Response
     {
 
         $form = $this->createForm(ProductFormType::class, $product, [
@@ -86,65 +87,30 @@ class ProductController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $files = $form->get('images')->getData();
+            $imageNames = $productService->uploadImages($files);
 
-            // Gestion des images
-            $images = $form->get('images')->getData();
-
-            if (!empty($images)) {
-                // Suppression des anciennes images
-                foreach ($product->getImages() as $image) {
-                    $em->remove($image);
-                    $fileUploader->remove($image->getFilename());
-                }
-                $product->getImages()->clear();
-
-                // Ajout des nouvelles images
-                foreach ($images as $image) {
-                    $filename = $fileUploader->upload($image);
-
-                    $newImage = new Image();
-                    $newImage->setFilename($filename);
-                    $product->addImage($newImage);
-                    $images = $product->getImages();
-                    $em->persist($newImage);
-                }
+            foreach ($imageNames as $imageName) {
+                $productService->createThumbnail($imageName);
             }
 
-            $em->persist($product);
-            $em->flush();
+            $productService->update($product, $imageNames);
+
+
 
             $this->addFlash("success", "Le produit a été modifié avec succès.");
             return $this->redirectToRoute('admin.product.list.index');
         }
 
         return $this->render("pages/admin/product/edit.html.twig", [
-            "form" => $form->createView()
+            "form" => $form->createView(),
+            "product" => $product,
+            'productService' => $productService,
         ]);
     }
 
 
-    public function deleteImage(Request $request, FileUploader $fileUploader, ImageRepository $imageRepository, EntityManagerInterface $em): Response
-    {
-        $imageId = $request->request->get('image_id');
-        $image = $imageRepository->find($imageId);
 
-        if (!$image) {
-            throw $this->createNotFoundException('Image not found');
-        }
-
-        // Remove image from product
-        $product = $image->getProduct();
-        $product->removeImage($image);
-
-        // Remove image from database and server
-
-        $em->remove($image);
-        $em->flush();
-
-        $fileUploader->remove($image->getFilename());
-
-        return new JsonResponse(['success' => true]);
-    }
 
     #[Route('/pc-portables', name: 'admin.product_pc_portables.list')]
     public function pcPortables(ProductRepository $productRepository)
@@ -258,15 +224,40 @@ class ProductController extends AbstractController
         ]);
     }
 
+    #[Route('/image/{id}/delete', name: 'admin.image.delete', methods: ['DELETE'])]
+    public function deleteImage(Image $image, Request $request, EntityManagerInterface $em): Response
+    {
+        if ($this->isCsrfTokenValid("delete_image_" . $image->getId(), $request->request->get('csrf_token'))) {
+            $em->remove($image);
+            $em->flush();
+
+            $this->addFlash("success", "Cette image a été supprimée.");
+        }
+
+        return $this->redirectToRoute('admin.product.edit', ['id' => $image->getProduct()->getId()]);
+    }
 
 
 
     #[Route('/product/{id}/delete', name: 'admin.product.delete', methods: ['DELETE'])]
-    public function delete(Product $product, Request $request, EntityManagerInterface $em): Response
+    public function delete(Product $product, Request $request, EntityManagerInterface $em, ProductService $productService): Response
     {
         if ($this->isCsrfTokenValid("delete_product_" . $product->getId(), $request->request->get('csrf_token'))) {
-            $em->remove($product);
-            $em->flush();
+            foreach ($product->getImages() as $imageName) {
+                $imagePath = $productService->getProductImagePath($imageName);
+                $thumbnailPath = $productService->getProductThumbnailPath($imageName);
+
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+
+                if (file_exists($thumbnailPath)) {
+                    unlink($thumbnailPath);
+                }
+            }
+
+            $productService->delete($product);
+
 
             $this->addFlash("success", "Ce produit a été supprimé.");
         }

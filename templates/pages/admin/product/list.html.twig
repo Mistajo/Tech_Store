@@ -36,23 +36,20 @@
 				Nouveau Produit</a>
 		</div>
 
-		<div class="row">
-			<div class="col-md-3"></div>
+		<div
+			class="row">
+			{# <div class="col-md-3"></div> #}
 
-			<div class="col-md-9">
+			<div class="col-12">
 				<div class="row">
 					{% for product in products %}
 						<div class="col-md-9 mb-3 ms-auto">
 							<div class="card mb-3">
 								<div class="row g-0">
 									<div class="col-md-4">
-										{% set hasImage = false %}
-										{% for image in product.images %}
-											{% if not hasImage %}
-												<img src="{{ asset('uploads/images/' ~ image.getFilename()) }}" class="card-img" alt="{{ image.getFilename() }}">
-												{% set hasImage = true %}
-											{% endif %}
-										{% endfor %}
+										{% if product.images|length > 0 %}
+											<img src="{{ asset('/uploads/images/thumbnails/' ~ product.images[0].name) }}" class="card-img" alt="{{ product.name }}">
+										{% endif %}
 									</div>
 									<div class="col-md-4">
 										<div class="card-body">
@@ -64,8 +61,7 @@
 										<div class="card-body">
 											<h5 class="card-title">
 
-												{{ product.getPrice() }}
-												€
+												{{ product.getPrice()|format_currency('EUR', locale='fr') }}
 											</h5>
 											<p class="card-text">
 												<a class="btn btn-primary my-1 rounded-3" href="{{path('admin.product.edit',{'id':product.id})}}">Modifier</a>

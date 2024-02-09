@@ -14,5 +14,62 @@
 
 
 {% block main %}
-	<h1 class="text-center my-3 display-5">Hello World</h1>
+	<div class="container">
+		<h1 class="text-center my-3 display-5">Hello World</h1>
+
+		<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-9">
+				<div class="row">
+					{% for product in products %}
+						<div class="col-md-6 mb-4 d-flex justify-content-center">
+							<div class="card mb-3 border shadow w-auto h-auto">
+								<a href="#">
+									{% if product.images|length > 0 %}
+										<img src="{{ asset('/uploads/images/thumbnails/' ~ product.images[0].name) }}" class="card-img" alt="{{ product.name }}">
+									{% endif %}
+								</a>
+								<div class="card-body">
+									<h5 class="card-title">
+										<strong>
+											{{product.name}}
+										</strong>
+									</h5>
+									<li>
+										Stock :
+										{{ product.Stock }}
+										Personnes
+									</li>
+
+									{% if product.shortDescription is not empty %}
+										<li class="class=card-text">Description :
+											{{ product.shortDescription|striptags|u.truncate(70, '...')|raw }}
+										</li>
+									{% endif %}
+
+									<li>
+										Prix/unitaire :
+										{{ product.price|format_currency('EUR', locale='fr') }}
+
+									</li>
+
+
+									<p class="my-2">
+										<a href="#" class="btn btn-secondary">Voir Détails</a>
+									</p>
+
+								</div>
+							</div>
+						</div>
+
+
+					{% endfor %}
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
 {% endblock %}

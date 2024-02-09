@@ -28,6 +28,21 @@ $('#product_form_subCategories').select2();
 {% block main %}
 	<h1 class="text-center my-3 display-5">Modification d'un produit</h1>
 
+	{% for message in app.flashes('success') %}
+		<div class="text-center alert alert-success alert-dismissible fade show" role="alert">
+			{{message}}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+
+	{% for message in app.flashes('warning') %}
+		<div class="text-center alert alert-warning alert-dismissible fade show" role="alert">
+			{{message}}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+
+
 	<div class="container mt-5">
 		<div class="row">
 			<div class="col-md-10 ms-auto">
@@ -70,43 +85,58 @@ $('#product_form_subCategories').select2();
 							{{ form_widget(form.stock, {'attr' : {'class': 'form-control'}}) }}
 						</div>
 					</div>
-					<div class="mb-3">
-						<label for="product_form_image">Image :</label>
-						{# on affiche le message d'erreur du nom #}
-						<div class="text-danger">{{ form_errors(form.images) }}</div>
-						{{ form_widget(form.images, {'attr' : {'class': 'form-control'}}) }}
-					</div>
-					<div class="row">
-						<div class="col-md-6">
-							<div class="mb-3">
-								<label for="product_form_shortdescription">Description Courte :</label>
-								{# on affiche le message d'erreur pour le prénom #}
-								<div class="text-danger">{{ form_errors(form.shortDescription) }}</div>
-								{# on mets en form l'input du prénom #}
-								{{ form_widget(form.shortDescription,{'attr' : {'class': 'form-control'}}) }}
-							</div>
-						</div>
-
-						<div class="col-md-6">
-							<div class="mb-3">
-								<label for="product_form_stock">Description Longue :</label>
-								{# on affiche le message d'erreur du nom #}
-								<div class="text-danger">{{ form_errors(form.longDescription) }}</div>
-								{{ form_widget(form.longDescription, {'attr' : {'class': 'form-control'}}) }}
-							</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="mb-3">
+							<label for="product_form_shortdescription">Description Courte :</label>
+							{# on affiche le message d'erreur pour le prénom #}
+							<div class="text-danger">{{ form_errors(form.shortDescription) }}</div>
+							{# on mets en form l'input du prénom #}
+							{{ form_widget(form.shortDescription,{'attr' : {'class': 'form-control'}}) }}
 						</div>
 					</div>
 
-					<div class="mb-3 text-center">
-						<input formnovalidate type="submit" class="btn btn-primary" value="Modifier">
+					<div class="col-md-6">
+						<div class="mb-3">
+							<label for="product_form_stock">Description Longue :</label>
+							{# on affiche le message d'erreur du nom #}
+							<div class="text-danger">{{ form_errors(form.longDescription) }}</div>
+							{{ form_widget(form.longDescription, {'attr' : {'class': 'form-control'}}) }}
+						</div>
 					</div>
-
-					{{ form_end(form) }}
 				</div>
 
+				<div class="mb-3">
+					<label for="product_form_image">Image :</label>
+					{# on affiche le message d'erreur du nom #}
+					<div class="text-danger">{{ form_errors(form.images) }}</div>
+					{{ form_widget(form.images, {'attr' : {'class': 'form-control'}}) }}
+				</div>
+
+				<div class="row">
+					{% for image in product.images %}
+						<div class="col-md-3 mb-3">
+							<img src="{{ asset('/uploads/images/thumbnails/' ~ image.name) }}" class="d-block" alt="{{ product.name }}">
+							<a href="#" class="btn btn-danger btn-sm mt-1" onclick="event.preventDefault(); return confirm('Voulez vous vraiment supprimer cette image?') && document.querySelector('#form_delete_image_{{image.id}}').submit()" title="Supprimer">Supprimer</a>
+							<form method="POST" id="form_delete_image_{{image.id}}" action="{{path('admin.image.delete', {'id':image.id})}}">
+								<input type="hidden" name="csrf_token" value="{{csrf_token('delete_image_'~image.id)}}">
+								<input type="hidden" name="_method" value="delete">
+							</form>
+						</div>
+					{% endfor %}
+				</div>
+
+				<div class="mb-3 text-center">
+					<a class="btn btn-primary my-1" href="{{path('admin.product.list.index')}}">Modifier</a>
+				</div>
+				{{ form_end(form) }}
 			</div>
 
+
 		</div>
+
+
 	</div>
 {% endblock %}
 {% block javascripts %}{% endblock %}

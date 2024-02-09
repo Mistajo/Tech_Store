@@ -71,12 +71,16 @@ $('#product_form_subCategories').select2();
 							{{ form_widget(form.stock, {'attr' : {'class': 'form-control'}}) }}
 						</div>
 					</div>
-					<div class="mb-3">
-						<label for="product_form_image">Image :</label>
+					<div
+						class="mb-3">
 						{# on affiche le message d'erreur du nom #}
 						<div class="text-danger">{{ form_errors(form.images) }}</div>
-						{{ form_widget(form.images, {'attr' : {'class': 'form-control'}}) }}
+						{% for image in form.images %}
+							{{ form_row(image, {'label': 'Image #' ~ loop.index}) }}
+						{% endfor %}
+
 					</div>
+
 					<div class="row">
 						<div class="col-md-6">
 							<div class="mb-3">

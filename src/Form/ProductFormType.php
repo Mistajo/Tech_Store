@@ -38,10 +38,6 @@ class ProductFormType extends AbstractType
             ->add('images', FileType::class, [
                 'multiple' => true,
                 'mapped' => false,
-                'by_reference' => false,
-                'attr' => [
-                    'class' => 'image-widget'
-                ],
             ])
 
             ->add('price', MoneyType::class, [
