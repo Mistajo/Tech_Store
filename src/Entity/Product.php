@@ -89,6 +89,10 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Image::class, orphanRemoval: true, cascade: ["persist"])]
     private Collection $images;
 
+    private $mainImage;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductCart::class)]
+    private Collection $productCarts;
 
 
 
@@ -99,6 +103,7 @@ class Product
     {
         $this->category = new ArrayCollection();
         $this->images = new ArrayCollection();
+        $this->productCarts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -258,6 +263,54 @@ class Product
             }
         }
 
+
+        return $this;
+    }
+
+    /**
+     * Get the value of mainImage
+     */
+    public function getMainImage()
+    {
+        return $this->mainImage;
+    }
+
+    /**
+     * Set the value of mainImage
+     */
+    public function setMainImage($mainImage): self
+    {
+        $this->mainImage = $mainImage;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProductCart>
+     */
+    public function getProductCarts(): Collection
+    {
+        return $this->productCarts;
+    }
+
+    public function addProductCart(ProductCart $productCart): static
+    {
+        if (!$this->productCarts->contains($productCart)) {
+            $this->productCarts->add($productCart);
+            $productCart->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductCart(ProductCart $productCart): static
+    {
+        if ($this->productCarts->removeElement($productCart)) {
+            // set the owning side to null (unless already changed)
+            if ($productCart->getProduct() === $this) {
+                $productCart->setProduct(null);
+            }
+        }
 
         return $this;
     }
