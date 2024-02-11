@@ -117,4 +117,15 @@ class Cart
 
         return $this;
     }
+
+    public function getProductCartByProduct(Product $product): ?ProductCart
+    {
+        foreach ($this->productCarts as $productCart) {
+            if ($productCart->getProduct() === $product) {
+                return $productCart;
+            }
+        }
+
+        return null;
+    }
 }

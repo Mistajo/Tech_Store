@@ -1,8 +1,8 @@
-{% extends "base_visitor.html.twig" %}
+{% extends "themes/base_visitor.html.twig" %}
 {% block title %}Détails de
 	{{ product.name }}
 {% endblock %}
-{% block body %}
+{% block main %}
 	<main class="container">
 		<section class="row">
 			<div class="col-12">
@@ -18,8 +18,8 @@
 					<div class="carousel-inner">
 						{% for image in product.images %}
 							<div class="carousel-item {{ (loop.first ) ? 'active' : '' }}">
-								<img src="{{ asset('assets/uploads/') ~ image.name }}" class="d-block w-100" alt="{{ product.name }}">
-								<img src="{{ asset('assets/uploads/products/mini/300x300-') ~ image.name }}" class="d-block w-100" alt="{{ product.name }}">
+								<img src="{{ asset('/uploads/images') ~ image.name }}" class="d-block w-100" alt="{{ product.name }}">
+								<img src="{{ asset('/uploads/images/thumbnails/' ~ image.name) }}" class="d-block w-100" alt="{{ product.name }}">
 							</div>
 						{% endfor %}
 					</div>
@@ -34,17 +34,24 @@
 				</div>
 			</div>
 			<div class="col-6">
-				<p>{{ product.description }}</p>
-				<p>Catégorie :
-					{{ product.categories.name }}</p>
+				<p>{{ product.shortDescription }}</p>
+				{# <p>Catégorie :
+																																																	{{ product.category.name }}</p> #}
+
 				<p>Prix :
-					{{ product.price / 100 }}
+					{{ product.price}}
 					€</p>
-				{% if product.stock > 0 %}
-					<a href="#" class="btn btn-success">Ajouter au panier</a>
-				{% else %}
-					<p class="text-danger">Temporairement en rupture de stock</p>
-				{% endif %}
+				<form action="{{path('visitor.cart.add',{'id':product.id})}}" method="post">
+
+					<label>Quantité:</label>
+					<input type="number" name="quantity" value="1" min="1" max="100">
+
+					{% if product.stock > 0 %}
+						<button type='submit' class="btn btn-success">Ajouter au panier</button>
+					{% else %}
+						<p class="text-danger">Temporairement en rupture de stock</p>
+					{% endif %}
+				</form>
 			</div>
 		</section>
 	</main>
