@@ -34,7 +34,7 @@
 
 
 		<section class="row">
-			<div class="col-8">
+			<div class="col-12">
 				<h1 class='text-center my-3 display-5'>Votre Panier</h1>
 
 				<table class="table">
@@ -51,7 +51,8 @@
 					</thead>
 					<tbody>
 						{% for item in cart %}
-							<tr>
+							<tr class='text-center'>
+
 								<td>#</td>
 								<td>
 									{% if item.product.images|length > 0 %}
