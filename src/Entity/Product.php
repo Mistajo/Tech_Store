@@ -82,7 +82,7 @@ class Product
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'products')]
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'products', cascade: ['persist'])]
     private Collection $category;
 
 
@@ -91,8 +91,11 @@ class Product
 
     private $mainImage;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductCart::class)]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductCart::class, cascade: ['persist'])]
     private Collection $productCarts;
+
+    #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'product', cascade: ['persist'])]
+    private Collection $orders;
 
 
 
@@ -104,6 +107,7 @@ class Product
         $this->category = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->productCarts = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -310,6 +314,33 @@ class Product
             if ($productCart->getProduct() === $this) {
                 $productCart->setProduct(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            $order->removeProduct($this);
         }
 
         return $this;

@@ -1,0 +1,55 @@
+{% extends 'themes/base_user.html.twig' %}
+
+{% block title %}
+	- Nouvelle  Adresse
+{% endblock %}
+
+{% block description %}
+	<meta name="description" content="Creation d'une nouvelle adresse'. ">
+{% endblock %}
+
+
+{% block main %}
+	<h1 class="text-center my-3 display-5">Creation nouvelle adresse
+
+	</h1>
+
+	<div class="container my-2">
+		<div class="col-md-12 d-flex justify-content-center align-items-center">
+			{{ form_start(form) }}
+			<div class="mb-3">
+				<label for="">Titre :</label>
+				<div class="text-danger">{{ form_errors(form.title) }}</div>
+				{{ form_widget(form.title,{'attr':{'class': 'form-control'}}) }}
+			</div>
+			<div class="mb-3">
+				<label for="">Adresse :</label>
+				<div class="text-danger">{{ form_errors(form.address) }}</div>
+				{{ form_widget(form.address,{'attr':{'class': 'form-control'}}) }}
+			</div>
+			<div class="mb-3">
+				<label for="">Complement :</label>
+				<div class="text-danger">{{ form_errors(form.addressLine2) }}</div>
+				{{ form_widget(form.addressLine2,{'attr':{'class': 'form-control'}}) }}
+			</div>
+			<div class="mb-3">
+				<label for="">Code Postal :</label>
+				<div class="text-danger">{{ form_errors(form.zipCode) }}</div>
+				{{ form_widget(form.zipCode,{'attr':{'class': 'form-control'}}) }}
+			</div>
+			<div class="mb-3">
+				<label for="">Ville :</label>
+				<div class="text-danger">{{ form_errors(form.town) }}</div>
+				{{ form_widget(form.town,{'attr':{'class': 'form-control'}}) }}
+			</div>
+
+			<div class="mb-3">
+				<input formnovalidate type="submit" class="btn btn-primary" value="Créer">
+			</div>
+
+
+			{{ form_end(form) }}
+		</div>
+	</div>
+
+{% endblock %}

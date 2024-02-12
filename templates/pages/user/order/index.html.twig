@@ -1,0 +1,52 @@
+{% extends 'themes/base_user.html.twig' %}
+
+{% block title %}
+	- Commande
+{% endblock %}
+
+{% block description %}
+	<meta name="description" content="Bienvenue sur le processus de commande'. ">
+{% endblock %}
+
+
+{% block main %}
+	<h1 class="text-center my-3 display-5">Creation de Commande
+	</h1>
+
+	<div class="container my-2">
+		<div class="row">
+			<div class="col-md-9">
+				<section>
+					<h5>1 - Vos Articles</h5>
+					<div class="row">
+						{% for item in cart %}
+							<div class="col-md-3">
+								{% if item.product.images|length > 0 %}
+									<img src="{{ asset('/uploads/images/thumbnails/' ~ item.product.images[0].name) }}" class="w-75 h-75" alt="{{ item.product.name }}">
+								{% endif %}
+								<p class="text-center">{{ item.product.name }}</p>
+							</div>
+						{% endfor %}
+					</div>
+				</section>
+				<section>
+					<h5>2 - Choisissez votre adresse de Livraison</h5>
+					<div class="mb-3">
+						{{ form_label(form.addresses) }}
+						{% for address in form.addresses %}
+							<div class="form-check bg-body-secondary">
+								{{ form_widget(address, {'attr': {'class': 'form-check-input'}}) }}
+								{{ form_label(address, '', {'attr': {'class': 'form-check-label'}, 'label_html': true})|raw }}
+							</div>
+						{% endfor %}
+						{{ form_errors(form.addresses) }}
+					</div>
+				</section>
+
+
+			</div>
+
+		</div>
+
+	</div>
+{% endblock %}

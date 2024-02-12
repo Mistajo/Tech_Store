@@ -1,0 +1,90 @@
+{% extends 'themes/base_user.html.twig' %}
+
+{% block title %}
+	- Mes Adresses
+{% endblock %}
+
+{% block description %}
+	<meta name="description" content="Bienvenue sur les adresses de l'utilisateur'. ">
+{% endblock %}
+
+
+{% block main %}
+	<h1 class="text-center my-3 display-5">Mes Adresses
+	</h1>
+
+	<div
+		class="container my-2">
+		<!--Alerte Flash-->
+		<div class="col-md-6 mx-auto">
+			{% for message in app.flashes('success') %}
+				<div class="text-center alert alert-success alert-dismissible fade show" role="alert">
+					{{message}}
+					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				</div>
+			{% endfor %}
+		</div>
+		<!--Fin Alerte Flash-->
+
+		<div
+			class="row">
+			<!-- Card Creation nouvelle adresse-->
+			<div class="col-md-4">
+				<a class=" text-decoration-none" href="{{path('user.addresses.create')}}">
+					<div class="card mb-3 _card_adresses">
+						<div class="card-body text-center">
+							<i class="fa-solid fa-plus text-center-black mt-5"></i>
+							<div class=' d-flex justify-content-center align-items-center mt-5'>
+								<h5 class="card-title text-center-black  ">Ajouter une adresse</h5>
+							</div>
+						</div>
+					</div>
+				</a>
+			</div>
+			<!-- Fin Card Creation nouvelle adresse-->
+
+			<!-- Card Pour les nouvelles adresse -->
+			{% for addresses in addresses %}
+				<div class="col-md-4">
+					<div class="card mb-3 _card_adresses">
+
+						<div class="card-body">
+							<strong>
+								{{addresses.title}}
+							</strong>
+							<br>
+							{{addresses.address}}
+							{% if addresses.addressLine2 is not empty %}
+								<br>
+								{{addresses.addressLine2}}
+							{% endif %}
+							<br>
+							{{addresses.town|upper}},{{addresses.zipCode}}
+
+						</div>
+
+						<!-- Boutton  -->
+						<div class="d-flex justify-content-between mx-2 my-2">
+							<a href="{{path('user.addresses.edit',{'id': addresses.id})}}" class="btn btn-primary">Modifier</a>
+
+							<a href="#" class="btn btn-danger" onclick="event.preventDefault(); return confirm('Voulez vous vraiment supprimer cette adresse?') && document.querySelector('#form_delete_addresses_{{addresses.id}}').submit()" title="Supprimer">Supprimer</a>
+							<form method="POST" id="form_delete_addresses_{{addresses.id}}" action="{{path('user.addresses.delete', {'id':addresses.id})}}">
+								<input type="hidden" name="csrf_token" value="{{csrf_token('delete_addresses_'~addresses.id)}}">
+								<input type="hidden" name="_method" value="delete">
+							</form>
+
+						</div>
+						<!-- Fin boutton -->
+
+					</div>
+				</div>
+			{% endfor %}
+			<!-- Fin Card pour les nouvelles adresses -->
+
+
+		</div>
+
+
+	</div>
+
+{% endblock %}

@@ -21,32 +21,25 @@ class CartService
     }
 
 
-    public function addToCart($id)
+    public function addToCart($id, $quantity)
+    {
+        $cart = $this->requestStack->getSession()->get('cart', []);
+        if (!empty($cart[$id])) {
+            $cart[$id] += $quantity;
+        } else {
+            $cart[$id] = $quantity;
+        }
+        $this->getSession()->set('cart', $cart);
+    }
+
+
+    public function addFromCart($id)
     {
         $cart = $this->requestStack->getSession()->get('cart', []);
         if (!empty($cart[$id])) {
             $cart[$id]++;
         } else {
             $cart[$id] = 1;
-        }
-        $this->getSession()->set('cart', $cart);
-    }
-
-    public function removeCartAll()
-    {
-        $this->getSession()->remove('cart');
-    }
-
-    public function removeFromCart($id)
-    {
-        $cart = $this->requestStack->getSession()->get('cart', []);
-        if (!empty($cart[$id])) {
-            $cart[$id]--;
-        } else {
-            unset($cart[$id]);
-        }
-        if ($cart[$id] <= 0) {
-            unset($cart[$id]);
         }
         $this->getSession()->set('cart', $cart);
     }
@@ -69,6 +62,35 @@ class CartService
         }
         return $cartData;
     }
+
+
+    public function removeFromCart($id)
+    {
+        $cart = $this->requestStack->getSession()->get('cart', []);
+        if (!empty($cart[$id])) {
+            $cart[$id]--;
+            if ($cart[$id] <= 0) {
+                unset($cart[$id]);
+            }
+            $this->getSession()->set('cart', $cart);
+        }
+    }
+
+    public function removeProduct($id)
+    {
+        $cart = $this->requestStack->getSession()->get('cart', []);
+        if (!empty($cart[$id])) {
+            unset($cart[$id]);
+        }
+        $this->getSession()->set('cart', $cart);
+    }
+
+
+    public function removeCartAll()
+    {
+        $this->getSession()->remove('cart');
+    }
+
 
 
     public function getTotalCart(array $cart): int

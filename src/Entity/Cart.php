@@ -24,7 +24,7 @@ class Cart
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: ProductCart::class)]
+    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: ProductCart::class, cascade: ['persist'])]
     private Collection $productCarts;
 
     #[ORM\OneToOne(inversedBy: 'cart', cascade: ['persist', 'remove'])]

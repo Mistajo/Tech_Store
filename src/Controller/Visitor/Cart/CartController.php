@@ -27,7 +27,9 @@ class CartController extends AbstractController
     #[Route('/cart/{id<\d+>}/add', name: 'visitor.cart.add')]
     public function add($id, Request $request, CartService $cartService, Product $product): Response
     {
-        $cartService->addToCart($id);
+        $quantity = (int)$request->request->get('quantity');
+
+        $cartService->addToCart($id, $quantity);
 
         $this->addFlash('success', "Le produit {$product->getName()} a bien été ajouté au panier");
 
@@ -38,9 +40,9 @@ class CartController extends AbstractController
     }
 
     #[Route('/cart/{id<\d+>}/add/cart', name: 'visitor.cart.product.add')]
-    public function addInCart($id, Request $request, CartService $cartService, Product $product): Response
+    public function addInCart($id, CartService $cartService, Product $product): Response
     {
-        $cartService->addToCart($id);
+        $cartService->addFromCart($id);
 
         $this->addFlash('success', "Le produit {$product->getName()} a bien été ajouté au panier");
 
@@ -66,6 +68,19 @@ class CartController extends AbstractController
         $cartService->removeFromCart($id);
 
         $this->addFlash('warning', "Le produit {$product->getName()} a bien été supprimé du panier");
+
+        return $this->redirectToRoute('visitor.cart.index', [
+            'slug' => $product->getSlug(),
+            'id' => $product->getId(),
+        ]);
+    }
+
+    #[Route('/cart/{id}/remove-product', name: 'visitor.cart.remove.product')]
+    public function removeProduct($id, Request $request, CartService $cartService, Product $product): Response
+    {
+        $cartService->removeProduct($id);
+
+        $this->addFlash('success', "Le produit {$product->getName()} a bien été supprimé du panier");
 
         return $this->redirectToRoute('visitor.cart.index', [
             'slug' => $product->getSlug(),
