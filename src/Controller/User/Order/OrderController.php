@@ -4,6 +4,7 @@ namespace App\Controller\User\Order;
 
 use App\Form\OrderFormType;
 use App\Repository\AddressesRepository;
+use App\Repository\CarrierRepository;
 use App\Service\CartService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,16 +14,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class OrderController extends AbstractController
 {
     #[Route('/order/create', name: 'user.order.create')]
-    public function index(CartService $cartService, AddressesRepository $addressesRepository): Response
+    public function index(CartService $cartService, AddressesRepository $addressesRepository, CarrierRepository $carrierRepository): Response
     {
 
         $user = $this->getUser();
         $addresses = $addressesRepository->findBy(['user' => $user]);
+        $carriers = $carrierRepository->findAll();
         $cart = $cartService->getCart();
         $total = $cartService->getTotalCart($cart);
 
         $form = $this->createForm(OrderFormType::class, null, [
-            'addresses' => $addresses
+            'addresses' => $addresses,
+            'carriers' => $carriers
         ]);
 
 
@@ -30,7 +33,8 @@ class OrderController extends AbstractController
             'cart' => $cart,
             'total' => $total,
             'form' => $form,
-            'addresses' => $addresses
+            'addresses' => $addresses,
+            'carriers' => $carriers
         ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Addresses;
+use App\Entity\Carrier;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,6 +21,14 @@ class OrderFormType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
 
+            ])
+            ->add('carriers', EntityType::class, [
+                'class' => Carrier::class,
+                'label' => false,
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+
             ]);
     }
 
@@ -27,6 +36,7 @@ class OrderFormType extends AbstractType
     {
         $resolver->setDefaults([
             'addresses' => [],
+            'carriers' => [],
 
         ]);
     }

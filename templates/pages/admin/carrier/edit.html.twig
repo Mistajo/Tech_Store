@@ -1,0 +1,63 @@
+{% extends "themes/base_admin.html.twig" %}
+
+{% block title %}
+	- Admin - Modification du transporteur
+{% endblock %}
+
+{% block description %}
+	<meta name="description" content="Bienvenue sur la Modification du transporteur. ">
+
+{% endblock %}
+
+{% block jQuery %}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+
+{% block select2 %}
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+	<script>
+		$(document).ready(function () {
+$('#category_form_subCategories').select2();
+});
+	</script>
+{% endblock %}
+
+
+{% block main %}
+	<h1 class="text-center my-3 display-5">Modification du transporteur</h1>
+
+
+	<div class="container mt-5">
+		<div class="col-md-6 mx-auto">
+			{{form_start(form)}}
+			<div class="mb-3">
+				<label for="carrier_form_name">Nom :
+				</label>
+				<div class="text-danger">{{form_errors(form.name) }}</div>
+				{{form_widget(form.name, {'attr': {'class': 'form-control'}})}}
+			</div>
+			<div class="mb-3">
+				<label for="carrier_form_image">Image :
+				</label>
+				<div class="text-danger">{{form_errors(form.imageFile)}}</div>
+				{{form_widget(form.imageFile, {'attr': {'class': 'form-control'}})}}
+			</div>
+			<div class="mb-3">
+				<label for="carrier_form_content">Contenu :
+				</label>
+				<div class="text-danger">{{form_errors(form.content)}}</div>
+				{{form_widget(form.content, {'attr': {'class': 'form-control'}})}}
+			</div>
+			<div class="mb-3">
+				<label for="product_form_price">Prix :</label>
+				<div class="text-danger">{{ form_errors(form.price) }}</div>
+				{{ form_widget(form.price,{'attr' : {'class': 'form-control'}}) }}
+			</div>
+			<div class="mb-3">
+				<input formnovalidate type="submit" class="btn btn-primary" value="Modifier">
+			</div>
+			{{form_end(form)}}
+		</div>
+	</div>
+{% endblock %}
