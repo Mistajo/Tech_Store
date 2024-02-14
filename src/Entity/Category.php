@@ -33,7 +33,7 @@ class Category
         match: true,
         message: 'Le nom doit contenir uniquement des lettres, des chiffres le tiret du milieu de l\'undescore.',
     )]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $name = null;
 
     #[Gedmo\Slug(fields: ['name'])]

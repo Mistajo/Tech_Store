@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CarrierRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,12 +23,24 @@ class Carrier
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom est obligatoire.")]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'Le nom doit contenir au maximum {{ limit }} caractères.',
+    )]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $name = null;
 
+    #[Assert\NotBlank(message: "Le contenu est obligatoire.")]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
+    #[Assert\NotBlank(message: "Le prix de vente est obligatoire.")]
+    #[Assert\Regex(
+        pattern: "/[0-9]{1,}[.,]{0,1}[0-9]{0,2}/",
+        match: true,
+        message: 'Le prix de vente doit contenir uniquement des chiffres, un point et une virgule.',
+    )]
     #[ORM\Column]
     private ?float $price = null;
 
@@ -41,11 +55,21 @@ class Carrier
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
+    #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\OneToMany(mappedBy: 'carrier', targetEntity: Order::class)]
+    private Collection $orders;
+
+    public function __construct()
+    {
+        $this->orders = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -154,5 +178,35 @@ class Carrier
         return $this->name . '<br>' .
             $this->content . '<br>' .
             number_format($this->price, 2, '.', '') . '€';
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setCarrier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getCarrier() === $this) {
+                $order->setCarrier(null);
+            }
+        }
+
+        return $this;
     }
 }

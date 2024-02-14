@@ -6,6 +6,11 @@ use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
@@ -16,22 +21,47 @@ class Order
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orders')]
-    private ?User $user = null;
-
+    #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'orders', cascade: ['persist'])]
-    private Collection $product;
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    private ?User $user = null;
+
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?Addresses $addresses = null;
 
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    private ?Carrier $carrier = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $reference = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $methodOfPayment = null;
+
+    #[ORM\Column]
+    private ?bool $isPaid = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $stripeSessionId = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $PaypalSessionId = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $carrierPrice = null;
+
+    #[ORM\OneToMany(mappedBy: 'orders', targetEntity: OrderProduct::class)]
+    private Collection $orderProducts;
+
     public function __construct()
     {
-        $this->product = new ArrayCollection();
+        $this->orderProducts = new ArrayCollection();
     }
+
+
 
     public function getId(): ?int
     {
@@ -62,29 +92,6 @@ class Order
         return $this;
     }
 
-    /**
-     * @return Collection<int, Product>
-     */
-    public function getProduct(): Collection
-    {
-        return $this->product;
-    }
-
-    public function addProduct(Product $product): static
-    {
-        if (!$this->product->contains($product)) {
-            $this->product->add($product);
-        }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): static
-    {
-        $this->product->removeElement($product);
-
-        return $this;
-    }
 
     public function getAddresses(): ?Addresses
     {
@@ -94,6 +101,120 @@ class Order
     public function setAddresses(?Addresses $addresses): static
     {
         $this->addresses = $addresses;
+
+        return $this;
+    }
+
+    public function getCarrier(): ?Carrier
+    {
+        return $this->carrier;
+    }
+
+    public function setCarrier(?Carrier $carrier): static
+    {
+        $this->carrier = $carrier;
+
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(string $reference): static
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    public function getMethodOfPayment(): ?string
+    {
+        return $this->methodOfPayment;
+    }
+
+    public function setMethodOfPayment(?string $methodOfPayment): static
+    {
+        $this->methodOfPayment = $methodOfPayment;
+
+        return $this;
+    }
+
+    public function isIsPaid(): ?bool
+    {
+        return $this->isPaid;
+    }
+
+    public function setIsPaid(bool $isPaid): static
+    {
+        $this->isPaid = $isPaid;
+
+        return $this;
+    }
+
+    public function getStripeSessionId(): ?string
+    {
+        return $this->stripeSessionId;
+    }
+
+    public function setStripeSessionId(?string $stripeSessionId): static
+    {
+        $this->stripeSessionId = $stripeSessionId;
+
+        return $this;
+    }
+
+    public function getPaypalSessionId(): ?string
+    {
+        return $this->PaypalSessionId;
+    }
+
+    public function setPaypalSessionId(?string $PaypalSessionId): static
+    {
+        $this->PaypalSessionId = $PaypalSessionId;
+
+        return $this;
+    }
+
+    public function getCarrierPrice(): ?float
+    {
+        return $this->carrierPrice;
+    }
+
+    public function setCarrierPrice(?float $carrierPrice): static
+    {
+        $this->carrierPrice = $carrierPrice;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderProduct>
+     */
+    public function getOrderProducts(): Collection
+    {
+        return $this->orderProducts;
+    }
+
+    public function addOrderProduct(OrderProduct $orderProduct): static
+    {
+        if (!$this->orderProducts->contains($orderProduct)) {
+            $this->orderProducts->add($orderProduct);
+            $orderProduct->setOrders($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderProduct(OrderProduct $orderProduct): static
+    {
+        if ($this->orderProducts->removeElement($orderProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($orderProduct->getOrders() === $this) {
+                $orderProduct->setOrders(null);
+            }
+        }
 
         return $this;
     }

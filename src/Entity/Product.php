@@ -28,11 +28,6 @@ class Product
         max: 255,
         maxMessage: 'Le nom doit contenir au maximum {{ limit }} caractères.',
     )]
-    #[Assert\Regex(
-        pattern: "/^[0-9a-zA-Z\-\_\'\ áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]+$/i",
-        match: true,
-        message: 'Le nom doit contenir uniquement des lettres, des chiffres le tiret du milieu de l\'undescore.',
-    )]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
@@ -94,8 +89,12 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductCart::class, cascade: ['persist'])]
     private Collection $productCarts;
 
-    #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'product', cascade: ['persist'])]
-    private Collection $orders;
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: OrderProduct::class)]
+    private Collection $orderProducts;
+
+
+
+
 
 
 
@@ -107,7 +106,7 @@ class Product
         $this->category = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->productCarts = new ArrayCollection();
-        $this->orders = new ArrayCollection();
+        $this->orderProducts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -320,27 +319,30 @@ class Product
     }
 
     /**
-     * @return Collection<int, Order>
+     * @return Collection<int, OrderProduct>
      */
-    public function getOrders(): Collection
+    public function getOrderProducts(): Collection
     {
-        return $this->orders;
+        return $this->orderProducts;
     }
 
-    public function addOrder(Order $order): static
+    public function addOrderProduct(OrderProduct $orderProduct): static
     {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-            $order->addProduct($this);
+        if (!$this->orderProducts->contains($orderProduct)) {
+            $this->orderProducts->add($orderProduct);
+            $orderProduct->setProduct($this);
         }
 
         return $this;
     }
 
-    public function removeOrder(Order $order): static
+    public function removeOrderProduct(OrderProduct $orderProduct): static
     {
-        if ($this->orders->removeElement($order)) {
-            $order->removeProduct($this);
+        if ($this->orderProducts->removeElement($orderProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($orderProduct->getProduct() === $this) {
+                $orderProduct->setProduct(null);
+            }
         }
 
         return $this;

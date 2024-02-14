@@ -6,6 +6,10 @@ use App\Repository\AddressesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: AddressesRepository::class)]
 class Addresses
@@ -15,27 +19,73 @@ class Addresses
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: "Le titre est obligatoire.")]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'Le titre doit contenir au maximum {{ limit }} caractères.',
+    )]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
     #[ORM\ManyToOne(inversedBy: 'addresses')]
     private ?User $user = null;
 
+    #[Assert\NotBlank(message: "L'adresse est obligatoire.")]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "L'adresse ne doit pas dépasser {{ limit }} caractères.",
+    )]
+    #[Assert\Regex(
+        pattern: "/^[0-9a-zA-Z-_' áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]+$/i",
+        match: true,
+        message: "L'adresse doit contenir uniquement des lettres, des chiffres, le tiret du milieu et l\'undescore.",
+    )]
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "L'adresse ne doit pas dépasser {{ limit }} caractères.",
+    )]
+    #[Assert\Regex(
+        pattern: "/^[0-9a-zA-Z-_' áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]+$/i",
+        match: true,
+        message: "L'adresse doit contenir uniquement des lettres, des chiffres, le tiret du milieu et l\'undescore.",
+    )]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $addressLine2 = null;
 
+    #[Assert\NotBlank(message: "Le nom de la ville est obligatoire.")]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "Le nom de la ville ne doit pas dépasser {{ limit }} caractères.",
+    )]
+    #[Assert\Regex(
+        pattern: "/^[0-9a-zA-Z-_' áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]+$/i",
+        match: true,
+        message: "Le nom de la ville doit contenir uniquement des lettres, des chiffres le tiret du milieu de l\'undescore.",
+    )]
     #[ORM\Column(length: 255)]
     private ?string $town = null;
 
+    #[Assert\NotBlank(message: "Le code postal est obligatoire.")]
+    #[Assert\Length(
+        max: 5,
+        maxMessage: "Le code postal ne doit pas dépasser {{ limit }} caractères.",
+    )]
+    #[Assert\Regex(
+        pattern: "/^\d{5}(?:\d{4})?$/i",
+        match: true,
+        message: "Le code postal doit contenir uniquement des chiffres.",
+    )]
     #[ORM\Column(length: 16)]
     private ?string $zipCode = null;
 
+    #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 

@@ -87,6 +87,10 @@ class ProductController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $name = $form->get('name')->getData();
+            $price = $form->get('price')->getData();
+
+
             $files = $form->get('images')->getData();
             $imageNames = $productService->uploadImages($files);
 
@@ -94,7 +98,7 @@ class ProductController extends AbstractController
                 $productService->createThumbnail($imageName);
             }
 
-            $productService->update($product, $imageNames);
+            $productService->update($product, $imageNames, $name, $price);
 
 
 

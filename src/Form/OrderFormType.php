@@ -13,12 +13,14 @@ class OrderFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $user = $options['user'];
         $builder
             ->add('addresses', EntityType::class, [
                 'class' => Addresses::class,
                 'label' => false,
                 'required' => true,
                 'multiple' => false,
+                'choices' => $user->getAddresses(),
                 'expanded' => true,
 
             ])
@@ -35,8 +37,8 @@ class OrderFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'addresses' => [],
-            'carriers' => [],
+            'user' => [],
+
 
         ]);
     }
