@@ -41,7 +41,7 @@ class Order
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $methodOfPayment = null;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ['default' => false])]
     private ?bool $isPaid = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -56,8 +56,15 @@ class Order
     #[ORM\OneToMany(mappedBy: 'orders', targetEntity: OrderProduct::class)]
     private Collection $orderProducts;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $carrierName = null;
+
+    #[ORM\Column]
+    private ?float $totalPayable = null;
+
     public function __construct()
     {
+        $this->isPaid = false;
         $this->orderProducts = new ArrayCollection();
     }
 
@@ -215,6 +222,30 @@ class Order
                 $orderProduct->setOrders(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCarrierName(): ?string
+    {
+        return $this->carrierName;
+    }
+
+    public function setCarrierName(?string $carrierName): static
+    {
+        $this->carrierName = $carrierName;
+
+        return $this;
+    }
+
+    public function getTotalPayable(): ?float
+    {
+        return $this->totalPayable;
+    }
+
+    public function setTotalPayable(float $totalPayable): static
+    {
+        $this->totalPayable = $totalPayable;
 
         return $this;
     }
