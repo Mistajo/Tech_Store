@@ -1,0 +1,42 @@
+{% extends "themes/base_admin.html.twig" %}
+
+{% block title %}
+	- Admin - Nouveau Mode de paiement
+{% endblock %}
+
+{% block description %}
+	<meta name="description" content="Bienvenue sur la liste des modes de paiements. ">
+{% endblock %}
+
+{% block main %}
+	<h1 class="text-center my-3 display-5">Nouveau mode de paiement</h1>
+
+	<div class="container mt-5">
+		<div class="col-md-6 mx-auto">
+			{{form_start(form)}}
+			<div class="mb-3">
+				<label for="payment_form_title">Nom :
+				</label>
+				<div class="text-danger">{{form_errors(form.title) }}</div>
+				{{form_widget(form.title, {'attr': {'class': 'form-control'}})}}
+			</div>
+			<div class="mb-3">
+				<label for="payment_form_image">Image :
+				</label>
+				<div class="text-danger">{{form_errors(form.imageFile)}}</div>
+				{{form_widget(form.imageFile, {'attr': {'class': 'form-control'}})}}
+			</div>
+			<div class="mb-3">
+				<label for="payment_form_content">Contenu :
+				</label>
+				<div class="text-danger">{{form_errors(form.content)}}</div>
+				{{form_widget(form.content, {'attr': {'class': 'form-control'}})}}
+			</div>
+
+			<div class="mb-3">
+				<input formnovalidate type="submit" class="btn btn-primary" value="Créer">
+			</div>
+			{{form_end(form)}}
+		</div>
+	</div>
+{% endblock %}

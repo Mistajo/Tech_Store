@@ -28,7 +28,6 @@ class Order
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?User $user = null;
 
-
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?Addresses $addresses = null;
 
@@ -53,7 +52,7 @@ class Order
     #[ORM\Column(nullable: true)]
     private ?float $carrierPrice = null;
 
-    #[ORM\OneToMany(mappedBy: 'orders', targetEntity: OrderProduct::class)]
+    #[ORM\OneToMany(mappedBy: 'orders', targetEntity: OrderProduct::class, orphanRemoval: true, cascade: ["persist"])]
     private Collection $orderProducts;
 
     #[ORM\Column(length: 255, nullable: true)]

@@ -8,7 +8,9 @@ use App\Form\OrderFormType;
 use App\Service\CartService;
 use App\Repository\CarrierRepository;
 use App\Repository\AddressesRepository;
+use App\Repository\OrderProductRepository;
 use App\Repository\OrderRepository;
+use App\Repository\PaymentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,14 +52,24 @@ class OrderController extends AbstractController
                 $orderProduct = new OrderProduct;
                 $orderProduct->setProduct($product['product'])
                     ->setOrders($order)
+                    ->setProductName($product['product']->getName())
                     ->setQuantity($product['quantity'])
                     ->setPrice($product['product']->getPrice()) // Utiliser l'objet Product pour récupérer le prix
                     ->setTotalRecap($product['product']->getPrice() * $product['quantity']); // Calculer le total du produit
                 $em->persist($orderProduct);
             }
+            try {
+                $em->flush();
+                $cartService->removeCartAll(); // Supprimer tous les produits du panier
+                return $this->redirectToRoute('user.order.choice.payment', ['reference' => $reference]);
+            } catch (\Exception $e) {
+                $this->addFlash("warning", "Votre commande n'a pas été validée.");
+                return $this->redirectToRoute('visitor.cart.index');
+            }
 
-            $em->flush();
-            return $this->redirectToRoute('user.order.choice.payment', ['reference' => $reference]);
+            // $em->flush();
+
+            // return $this->redirectToRoute('user.order.choice.payment', ['reference' => $reference]);
         }
 
         return $this->render('pages/user/order/index.html.twig', [
@@ -70,20 +82,24 @@ class OrderController extends AbstractController
     }
 
     #[Route('/order/Choice-Payment', name: 'user.order.choice.payment')]
-    public function choicePayment(CartService $cartService, OrderRepository $orderRepository, CarrierRepository $carrierRepository, Request $request): Response
+    public function choicePayment(CartService $cartService, OrderRepository $orderRepository, Request $request, PaymentRepository $paymentRepository, OrderProductRepository $orderProductRepository): Response
     {
         $reference = $request->query->get('reference');
         $order = $orderRepository->findOneBy(['reference' => $reference]);
         $cart = $cartService->getCart();
-        $total = $cartService->getTotalCart($cart);
+
         $carrierPrice = $request->query->get('carrierPrice');
+        $payments = $paymentRepository->findAll();
+        $orderProducts = $orderProductRepository->findAll();
 
 
         return $this->render('pages/user/payment/choicepayment.html.twig', [
             'cart' => $cart,
-            'total' => $total,
             'order' => $order,
             'carrierPrice' => $carrierPrice,
+            'payments' => $payments,
+            'orderProducts' => $orderProducts,
+            'current_order' => $order
         ]);
     }
 }

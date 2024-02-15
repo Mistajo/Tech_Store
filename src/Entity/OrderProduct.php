@@ -28,6 +28,9 @@ class OrderProduct
     #[ORM\ManyToOne(inversedBy: 'orderProducts')]
     private ?Order $orders = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $productName = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +92,18 @@ class OrderProduct
     public function setOrders(?Order $orders): static
     {
         $this->orders = $orders;
+
+        return $this;
+    }
+
+    public function getProductName(): ?string
+    {
+        return $this->productName;
+    }
+
+    public function setProductName(?string $productName): static
+    {
+        $this->productName = $productName;
 
         return $this;
     }

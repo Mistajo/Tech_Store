@@ -15,27 +15,62 @@
 
 	<div class="container my-2">
 		<div class="row">
-			<div class="col-md-9"></div>
+			<div class="col-md-9">
+				<section>
+
+					<h4 class='my-3'>Choisissez votre mode de paiement</h4>
+					<div class=''>
+						{% if payments is not empty %}
+							{% for payment in payments %}
+								<div class="col-md-9 my-3">
+									<div class="card">
+										<div class="card-body d-flex align-items-center my-2">
+											{% if payment.image %}
+												<img src="{{ vich_uploader_asset(payment, 'imageFile') }}" class=' card-img w-25 h-25' alt="{{ payment.title }}">
+											{% else %}
+												<p>---</p>
+											{% endif %}
+											<div class="ms-3">
+												<h5 class="card-title">{{ payment.title }}</h5>
+												<p class="card-text">{{ payment.content }}</p>
+											</div>
+											<a class='btn btn-success rounded-5 ms-auto' href="#">Choisir ce mode de paiement
+											</a>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+						{% else %}
+							<p>Aucune méthode de paiement disponible pour le moment.</p>
+						{% endif %}
+					</div>
+
+
+				</section>
+
+
+			</div>
 			<div class="col-md-3">
 				<h5 class='my-3'>Récapitulatif de la commande</h5>
 
 				<section class=' bg-body-secondary'>
 					<div class='mx-2'>
 						<h6>Articles</h6>
-						{% for item in cart %}
-							<div class=" d-flex justify-content-between mx-3">
-								<p>{{item.quantity}}
-									x
-									{{ item.product.name|striptags|u.truncate(15, '...')|raw }}</p>
+						{% for orderProduct in current_order.orderProducts %}
 
-								<p>{{ (item.quantity * item.product.price)|number_format('2', '.', ' ')}}
+							<div class=" d-flex justify-content-between mx-3">
+								<p>{{orderProduct.quantity}}
+									x
+									{{ orderProduct.productName|striptags|u.truncate(15, '...')|raw }}</p>
+								<p>{{ (orderProduct.quantity * orderProduct.price)|number_format('2', '.', ' ')}}
 									€</p>
 							</div>
 						{% endfor %}
 					</div>
 					<div class='mx-2 d-flex justify-content-between'>
 						<h6>Livraison</h6>
-						<p class=' text-light-emphasis mx-3'>{{ (order.carrierPrice)|number_format('2', '.', ' ') }}
+						<p class=' text-light-emphasis mx-3'>{{ (current_order.carrierPrice)|number_format('2', '.', ' ') }}
+
 							€</p>
 
 					</div>
@@ -46,12 +81,11 @@
 						</div>
 
 						<p class="text-danger" style="font-weight: bold;">
-							{{ (total + order.carrierPrice) | format_currency('EUR', locale='fr') }}
+							{{ (order.totalPayable) | format_currency('EUR', locale='fr') }}
 
 						</p>
 					</div>
 				</section>
-				<a class='btn btn-success my-2 rounded-5 w-100' href="">Valider ma commande</a>
 
 			</div>
 		</div>

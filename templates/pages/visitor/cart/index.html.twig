@@ -110,8 +110,10 @@
 						</tr>
 					</tfoot>
 				</table>
+				{% if cart|length > 0 %}
+					<a href="{{ path('user.order.create') }}" class="btn btn-primary">Valider le panier</a>
+				{% endif %}
 
-				<a href="{{path('user.order.create')}}" class="btn btn-primary">Valider le panier</a>
 
 			</div>
 		</section>
