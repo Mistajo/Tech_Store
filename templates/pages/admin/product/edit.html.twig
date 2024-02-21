@@ -113,6 +113,10 @@ $('#product_form_subCategories').select2();
 					<div class="text-danger">{{ form_errors(form.images) }}</div>
 					{{ form_widget(form.images, {'attr' : {'class': 'form-control'}}) }}
 				</div>
+				<div class="mb-3 text-center">
+					<input formnovalidate class="btn btn-primary my-1" type="submit" value="Modifier">
+				</div>
+				{{ form_end(form) }}
 
 				<div class="row">
 					{% for image in product.images %}
@@ -127,10 +131,6 @@ $('#product_form_subCategories').select2();
 					{% endfor %}
 				</div>
 
-				<div class="mb-3 text-center">
-					<a class="btn btn-primary my-1" href="{{path('admin.product.list.index')}}">Modifier</a>
-				</div>
-				{{ form_end(form) }}
 			</div>
 
 

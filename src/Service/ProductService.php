@@ -220,12 +220,9 @@ class ProductService
 
 
 
-    public function update(Product $product, array $imageNames, string $name, float $price): void
+    public function update(Product $product, array $imageNames): void
 
     {
-
-        $product->setName($name);
-        $product->setPrice($price);
 
         foreach ($imageNames as $imageName) {
 

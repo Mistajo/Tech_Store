@@ -87,10 +87,6 @@ class ProductController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $name = $form->get('name')->getData();
-            $price = $form->get('price')->getData();
-
-
             $files = $form->get('images')->getData();
             $imageNames = $productService->uploadImages($files);
 
@@ -98,9 +94,7 @@ class ProductController extends AbstractController
                 $productService->createThumbnail($imageName);
             }
 
-            $productService->update($product, $imageNames, $name, $price);
-
-
+            $productService->update($product, $imageNames);
 
             $this->addFlash("success", "Le produit a été modifié avec succès.");
             return $this->redirectToRoute('admin.product.list.index');
@@ -112,8 +106,6 @@ class ProductController extends AbstractController
             'productService' => $productService,
         ]);
     }
-
-
 
 
     #[Route('/pc-portables', name: 'admin.product_pc_portables.list')]

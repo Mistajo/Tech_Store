@@ -93,14 +93,6 @@ class Product
     private Collection $orderProducts;
 
 
-
-
-
-
-
-
-
-
     public function __construct()
     {
         $this->category = new ArrayCollection();
