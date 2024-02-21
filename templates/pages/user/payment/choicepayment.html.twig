@@ -12,39 +12,55 @@
 {% block main %}
 	<h1 class="text-center my-3 display-5">Récapitulatif de Commande
 	</h1>
+	{% for message in app.flashes('success') %}
+		<div class="text-center alert alert-success alert-dismissible fade show" role="alert">
+			{{message}}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+
+	{% for message in app.flashes('warning') %}
+		<div class="text-center alert alert-warning alert-dismissible fade show" role="alert">
+			{{message}}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+	{% for message in app.flashes('error') %}
+		<div class="text-center alert alert-danger alert-dismissible fade show" role="alert">
+			{{message}}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+
 
 	<div class="container my-2">
 		<div class="row">
 			<div class="col-md-9">
 				<section>
-
 					<h4 class='my-3'>Choisissez votre mode de paiement</h4>
-					<div class=''>
-						{% if payments is not empty %}
-							{% for payment in payments %}
-								<div class="col-md-9 my-3">
-									<div class="card">
-										<div class="card-body d-flex align-items-center my-2">
-											{% if payment.image %}
-												<img src="{{ vich_uploader_asset(payment, 'imageFile') }}" class=' card-img w-25 h-25' alt="{{ payment.title }}">
-											{% else %}
-												<p>---</p>
-											{% endif %}
-											<div class="ms-3">
-												<h5 class="card-title">{{ payment.title }}</h5>
-												<p class="card-text">{{ payment.content }}</p>
-											</div>
-											<a class='btn btn-success rounded-5 ms-auto' href="#">Choisir ce mode de paiement
-											</a>
+
+					{% if payments is not empty %}
+						{% for payment in payments %}
+							<div class="col-md-9 my-3">
+								<div class="card">
+									<div class="card-body d-flex align-items-center my-2">
+										{% if payment.image %}
+											<img src="{{ vich_uploader_asset(payment, 'imageFile') }}" class=' card-img w-25 h-25' alt="{{ payment.title }}">
+										{% else %}
+											<p>---</p>
+										{% endif %}
+										<div class="ms-3">
+											<h5 class="card-title">{{ payment.title }}</h5>
+											<p class="card-text">{{ payment.content }}</p>
 										</div>
+										<a class='btn btn-success rounded-5 ms-auto' href="{{ path('user.order.payment', {'paymentSlug': payment.slug, 'reference': order.reference}) }}">Choisir ce mode de paiement</a>
 									</div>
 								</div>
-							{% endfor %}
-						{% else %}
-							<p>Aucune méthode de paiement disponible pour le moment.</p>
-						{% endif %}
-					</div>
-
+							</div>
+						{% endfor %}
+					{% else %}
+						<p>Aucune méthode de paiement disponible pour le moment.</p>
+					{% endif %}
 
 				</section>
 

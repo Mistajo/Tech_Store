@@ -31,6 +31,9 @@ services:
             $thumbnailDirectory: '%kernel.project_dir%/public/uploads/images/thumbnails'
     App\Service\CartService:
         arguments:
+    app.paypal_jwt:
+        class: Firebase\JWT\JWT
+        arguments: ['%paypal_client_id%', 'none']
             
     App\EventListener\LoginListener:
         tags:
