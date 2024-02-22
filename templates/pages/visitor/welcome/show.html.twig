@@ -1,0 +1,150 @@
+{% extends "themes/base_visitor.html.twig" %}
+
+{% block title %}
+	- Vente de Materiel Informatique
+{% endblock %}
+
+{% block description %}{% endblock %}
+
+{% block keywords %}{% endblock %}
+
+{% block jQuery %}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+
+{% block slick %}
+	<!-- Add the slick-theme.css if you want default styling -->
+	<link
+	rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+	<!-- Add the slick-theme.css if you want default styling -->
+	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+	<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+	<script>
+		$(document).ready(function () {
+$('.carousel').slick({
+
+slidesToShow: 1,
+slidesToScroll: 1,
+arrows: false,
+fade: true,
+asNavFor: '.carousel-nav'
+
+});
+$('.carousel-nav').slick({
+
+slidesToShow: 3,
+slidesToScroll: 1,
+asNavFor: '.carousel',
+
+dots: true,
+centerMode: true,
+focusOnSelect: true
+});
+});
+	</script>
+
+{% endblock %}
+
+
+{% block main %}
+
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb mx-3 mt-2 bg-light">
+			<li class="breadcrumb-item">
+				<a href="{{path('visitor.welcome.index')}}">ACCUEIL</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a href="{{path('visitor.product_pc_portables.list')}}">PC PORTABLES</a>
+			</li>
+
+			<li class="breadcrumb-item active text-black" aria-current="page">
+				<strong>
+					{{product.name|upper|raw}}
+				</strong>
+			</li>
+		</ol>
+	</nav>
+
+
+	<h1 class="text-center my-3 display-5">DETAIL DU PRODUIT</h1>
+	<div class="container">
+
+		<div class="row mt-5">
+			<div class="col-md-6">
+				<div class="product-images">
+					<div class="carousel">
+						{% for image in product.images %}
+							<div>
+								<img src="{{ asset('/uploads/images/' ~ image.name) }}" class="d-block w-100" alt="{{ product.name }}">
+							</div>
+						{% endfor %}
+					</div>
+					<div class="carousel-nav border-5">
+						{% for image in product.images %}
+							<div class=' border border-black mx-2 d-flex justify-content-center'>
+								<img src="{{ asset('/uploads/images/thumbnails/' ~ image.name) }}" class="w-50" alt="{{ product.name }}">
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<h2 class='ms-3'>
+					{{product.name}}
+				</h2>
+				<p class='ms-3'>
+					{{product.shortDescription}}
+				</p>
+				<h4 class='ms-3'>
+					{{ product.price|format_currency('EUR', locale='fr') }}
+					<small style="font-size: 65%;">TTC</small>
+				</h4>
+				<div class='ms-3'>
+					<a class='btn btn-secondary mt-2 w-50' href="#">AJOUTER AU PANIER</a>
+				</div>
+
+				<div class="ms-3 my-3">
+					{% if product.stock > 20 %}
+						<div class="form-check green">
+							<input class="form-check-input text-bg-success" type="radio" name="availability-status" id="stock-available" value="available" checked>
+							<label class="form-check-label" for="stock-available">
+								DISPONIBLE
+							</label>
+						</div>
+					{% elseif product.stock == 0 %}
+						<div class="form-check grey">
+							<input class="form-check-input text-bg-light" type="radio" name="availability-status" id="stock-not-available" value="not-available" disabled>
+
+							<label class="form-check-label text-danger" for="stock-not-available">
+								<strong>
+									STOCK EPUISE
+								</strong>
+							</label>
+						</div>
+					{% else %}
+						<div class="form-check red">
+							<input class="form-check-input text-bg-danger" type="radio" name="availability-status" id="stock-limited" value="limited" checked>
+							<label class="form-check-label" for="stock-limited">
+								STOCK LIMITE
+							</label>
+						</div>
+					{% endif %}
+				</div>
+				<div class="ms-3">
+					<h6>Livraison en 48h</h6>
+				</div>
+				<hr>
+			</div>
+		</div>
+		<div>
+			<h5 class='text-center my-3 display-5'>DESCRIPTION DU PRODUIT</h5>
+			<p>{{product.longDescription}}</p>
+		</div>
+		<div>
+			<p class='text-center my-3 display-5'>NOTES ET AVIS</p>
+		</div>
+	</div>
+
+{% endblock %}
+{% block javascript %}{% endblock %}

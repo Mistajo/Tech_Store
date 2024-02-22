@@ -3,6 +3,7 @@
 namespace App\Controller\Visitor\Welcome;
 
 use App\Entity\Category;
+use App\Entity\Product;
 use App\Repository\CategoryRepository;
 use App\Repository\ImageRepository;
 use App\Repository\ProductRepository;
@@ -134,6 +135,17 @@ class WelcomeController extends AbstractController
 
         return $this->render('pages/visitor/product/keyboard.html.twig', [
             'products' => $products,
+        ]);
+    }
+
+    #[Route('/products/{id}/show', name: 'visitor.product_show')]
+    public function show($id, Product $product, ImageRepository $imageRepository): Response
+    {
+
+        $image = $imageRepository->findAll();
+        return $this->render('pages/visitor/welcome/show.html.twig', [
+            'product' => $product,
+            'image' => $image,
         ]);
     }
 }
