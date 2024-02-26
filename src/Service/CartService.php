@@ -86,6 +86,8 @@ class CartService
     }
 
 
+
+
     public function removeCartAll()
     {
         $this->getSession()->remove('cart');
@@ -103,6 +105,17 @@ class CartService
 
         return $total;
     }
+
+    public function cartItemCount(): int
+    {
+        $cart = $this->requestStack->getSession()->get('cart', []);
+        $count = 0;
+        foreach ($cart as $id => $quantity) {
+            $count++;
+        }
+        return $count;
+    }
+
 
     private function getSession(): SessionInterface
     {

@@ -67,6 +67,11 @@
 			{% endblock %}
 		{% endblock %}
 
+		{% block jQuery %}
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		{% endblock %}
+
+
 		{# slick.js #}
 		{% block slick %}{% endblock %}
 
@@ -91,6 +96,47 @@ $(this).removeClass("show");
 $(this).find(".dropdown-menu").removeClass("show");
 });
 });
+		</script>
+
+		<script>
+			// Fonction pour ajouter le nombre de produits dans le panier à l'icône de la barre de navigation
+function ajouterNombreProduitsDansPanier(quantite) { // Récupérez l'élément qui affiche le nombre d'éléments dans le panier
+var cartCount = document.querySelector('.cart-count');
+
+// Modifiez le texte pour afficher la quantité
+cartCount.innerText = quantite;
+
+// Affichez l'élément si la quantité est supérieure à 0
+if (quantite > 0) {
+cartCount.style.display = 'inline-block';
+} else {
+cartCount.style.display = 'none';
+}
+}
+
+// Utilisez la fonction pour afficher la quantité initiale au chargement de la page
+// ajouterNombreProduitsDansPanier(0);
+
+// Appeler la fonction pour récupérer la quantité de produits dans le panier via AJAX
+function getNombreProduitsDansPanier() {
+$.ajax({
+url: "{{ path('visitor.cart.count') }}",
+dataType: 'json',
+success: function (data) {
+ajouterNombreProduitsDansPanier(data.count);
+},
+error: function (error) {
+console.log('Erreur lors de la récupération du nombre de produits dans le panier:', error);
+}
+});
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+getNombreProduitsDansPanier();
+});
+
+// Appeler la fonction pour récupérer la quantité de produits dans le panier au chargement de la page
+// getNombreProduitsDansPanier();
 		</script>
 
 

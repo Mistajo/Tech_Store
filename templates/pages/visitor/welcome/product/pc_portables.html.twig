@@ -36,7 +36,7 @@
 							<div class="col-md-3">
 								<a href="{{path('visitor.product_show',{'id':product.id})}}">
 									{% if product.images|length > 0 %}
-										<img src="{{ asset('/uploads/images/thumbnails/' ~ product.images[0].name) }}" class="figure-img" alt="{{ product.name }}">
+										<img src="{{ asset('/uploads/images/thumbnails/' ~ product.images[0].name) }}" class="card-img img-thumbnail" alt="{{ product.name }}">
 									{% endif %}
 								</a>
 							</div>
@@ -81,8 +81,9 @@
 										<small style="font-size: 65%;">TTC</small>
 									</h5>
 									<p class="card-text my-5">
-										<a class=' btn btn-outline-primary mx-5' href="{{path('visitor.product_show',{'id':product.id})}}">VOIR PRODUIT</a>
-										<a class='btn btn-secondary mt-2 w-100' href="#">AJOUTER AU PANIER</a>
+										<a class=' btn btn-outline-primary d-flex justify-content-center' href="{{path('visitor.product_show',{'id':product.id})}}">VOIR PRODUIT</a>
+										<a class='btn btn-secondary mt-2 w-100 add-to-cart' href="{{path('visitor.cart.product.add',{'id': product.id})}}">AJOUTER AU PANIER</a>
+
 
 									</p>
 
@@ -100,3 +101,4 @@
 	</div>
 
 {% endblock %}
+{% block javascript %}{% endblock %}

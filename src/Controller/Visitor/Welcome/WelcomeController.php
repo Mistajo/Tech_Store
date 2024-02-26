@@ -2,14 +2,18 @@
 
 namespace App\Controller\Visitor\Welcome;
 
-use App\Entity\Category;
+use App\Entity\Review;
 use App\Entity\Product;
-use App\Repository\CategoryRepository;
+use App\Entity\Category;
+use App\Form\ReviewFormType;
 use App\Repository\ImageRepository;
 use App\Repository\ProductRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\CategoryRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class WelcomeController extends AbstractController
 {
@@ -139,13 +143,35 @@ class WelcomeController extends AbstractController
     }
 
     #[Route('/products/{id}/show', name: 'visitor.product_show')]
-    public function show($id, Product $product, ImageRepository $imageRepository): Response
+    public function show(Product $product, ImageRepository $imageRepository, Request $request, EntityManagerInterface $em): Response
     {
-
+        $user = $this->getUser();
         $image = $imageRepository->findAll();
+        // Récupération des données du formulaire
+        $rating = $request->request->get('rating');
+        $comment = $request->request->get('comment');
+
+        // // Vérification des données
+        // if (!$rating || !$comment) {
+        //     // Affichage d'un message d'erreur ou de redirection vers la page précédente
+        //     $this->addFlash('warning', 'Veuillez remplir le commentaire et donner une note');
+        // } else {
+        //     $review = new Review();
+        //     $review->setRating($rating);
+        //     $review->setContent($comment);
+        //     $review->setAuthor($user);
+        //     $review->setProduct($product);
+        //     $em->persist($review);
+        //     $em->flush();
+        //     $this->addFlash('success', 'Votre Avis a été pris en compte');
+        //     return $this->redirectToRoute('visitor.product_show', ['id' => $product->getId()]);
+        // }
+
+
         return $this->render('pages/visitor/welcome/show.html.twig', [
             'product' => $product,
             'image' => $image,
+            'user' => $user
         ]);
     }
 }

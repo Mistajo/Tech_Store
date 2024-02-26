@@ -7,6 +7,7 @@ use App\Service\CartService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CartController extends AbstractController
@@ -33,7 +34,7 @@ class CartController extends AbstractController
 
         $this->addFlash('success', "Le produit {$product->getName()} a bien été ajouté au panier");
 
-        return $this->redirectToRoute('visitor.product.show', [
+        return $this->redirectToRoute('visitor.product_show', [
             'slug' => $product->getSlug(),
             'id' => $product->getId(),
         ]);
@@ -86,5 +87,13 @@ class CartController extends AbstractController
             'slug' => $product->getSlug(),
             'id' => $product->getId(),
         ]);
+    }
+
+    #[Route('/cart/count', name: 'visitor.cart.count')]
+    public function count(CartService $cartService): JsonResponse
+    {
+        $count = $cartService->cartItemCount();
+
+        return $this->json(['count' => $count]);
     }
 }

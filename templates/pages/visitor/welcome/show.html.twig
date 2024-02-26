@@ -8,6 +8,10 @@
 
 {% block keywords %}{% endblock %}
 
+{% block fontAwesome %}
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+{% endblock %}
+
 {% block jQuery %}
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock %}
@@ -19,27 +23,30 @@
 	<!-- Add the slick-theme.css if you want default styling -->
 	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
 	<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-
 	<script>
 		$(document).ready(function () {
 $('.carousel').slick({
-
 slidesToShow: 1,
 slidesToScroll: 1,
 arrows: false,
 fade: true,
 asNavFor: '.carousel-nav'
-
 });
 $('.carousel-nav').slick({
-
 slidesToShow: 3,
 slidesToScroll: 1,
 asNavFor: '.carousel',
-
 dots: true,
 centerMode: true,
 focusOnSelect: true
+});
+
+$('.rating i').on('click', function () {
+var value = $(this).data('value');
+$('#rating').val(value);
+$(this).removeClass('far').addClass('fas');
+$(this).prevAll().removeClass('far').addClass('fas');
+$(this).nextAll().removeClass('fas').addClass('far');
 });
 });
 	</script>
@@ -48,7 +55,6 @@ focusOnSelect: true
 
 
 {% block main %}
-
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb mx-3 mt-2 bg-light">
 			<li class="breadcrumb-item">
@@ -65,9 +71,28 @@ focusOnSelect: true
 			</li>
 		</ol>
 	</nav>
-
-
 	<h1 class="text-center my-3 display-5">DETAIL DU PRODUIT</h1>
+	{% for message in app.flashes('success') %}
+		<div class="text-center alert alert-success alert-dismissible fade show" role="alert">
+			{{message}}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+
+	{% for message in app.flashes('warning') %}
+		<div class="text-center alert alert-warning alert-dismissible fade show" role="alert">
+			{{message}}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+	{% for message in app.flashes('error') %}
+		<div class="text-center alert alert-danger alert-dismissible fade show" role="alert">
+			{{message}}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+
+
 	<div class="container">
 
 		<div class="row mt-5">
@@ -100,9 +125,25 @@ focusOnSelect: true
 					{{ product.price|format_currency('EUR', locale='fr') }}
 					<small style="font-size: 65%;">TTC</small>
 				</h4>
-				<div class='ms-3'>
-					<a class='btn btn-secondary mt-2 w-50' href="#">AJOUTER AU PANIER</a>
-				</div>
+				<form action="{{path('visitor.cart.add',{'id':product.id})}}" method="post">
+
+					<label class='ms-3'>Quantité:</label>
+
+					<input type="number" name="quantity" value="{{ form.vars.value.quantity|default(1) }}" min="1" max="10" class='ms-3'>
+
+					<br>
+
+					{% if product.stock > 0 %}
+						<div
+							class='ms-3'>
+							{# <a class="btn btn-secondary mt-2 w-50 rounded-4 add-to-cart" data-product-id="{{product.id}}" href="">AJOUTER AU PANIER</a> #}
+							<button type='submit' class="btn btn-secondary mt-2 w-50 rounded-4 add-to-cart">AJOUTER AU PANIER</button>
+						</div>
+					{% else %}
+						<p class="text-danger">Temporairement en rupture de stock</p>
+					{% endif %}
+				</form>
+
 
 				<div class="ms-3 my-3">
 					{% if product.stock > 20 %}
@@ -137,14 +178,73 @@ focusOnSelect: true
 				<hr>
 			</div>
 		</div>
+		<h5 class='text-center my-3 display-5'>DESCRIPTION DU PRODUIT</h5>
 		<div>
-			<h5 class='text-center my-3 display-5'>DESCRIPTION DU PRODUIT</h5>
 			<p>{{product.longDescription}}</p>
 		</div>
-		<div>
-			<p class='text-center my-3 display-5'>NOTES ET AVIS</p>
+		<h5 class='text-center my-3 display-5'>NOTES ET AVIS</h5>
+		<div class="row mt-5">
+			<h3>Avis des clients</h3>
+			{% for review in product.reviews %}
+				{% set rating = review.getRating() %}
+				{% if rating > 0 %}
+					<p>
+						{% for i in 1..rating %}
+							<i class="fas fa-star text-warning"></i>
+						{% endfor %}
+						{% for i in rating+1..5 %}
+							<i class="far fa-star"></i>
+						{% endfor %}
+					</p>
+				{% endif %}
+				<p>{{ review.getContent() }}</p>
+				<p>{{ review.getAuthor().firstName }}</p>
+			{% endfor %}
+
 		</div>
+		<hr>
+		{# <div class="row mt-5">
+																																																																											<h3>Donner Votre avis</h3>
+																																																																											<form
+																																																																												id="product_review_form" method="POST" action="{{ path('visitor.product_show', {'id': product.id}) }}">
+																																																																								
+																																																																												<!-- Champ pour la note -->
+																																																																												<div class="rating">
+																																																																													<i class="far fa-star" data-value="1"></i>
+																																																																													<i class="far fa-star" data-value="2"></i>
+																																																																													<i class="far fa-star" data-value="3"></i>
+																																																																													<i class="far fa-star" data-value="4"></i>
+																																																																													<i class="far fa-star" data-value="5"></i>
+																																																																													<input type="hidden" name="rating" id="rating" value="0">
+																																																																												</div>
+																																																																												<!-- Champ pour le commentaire -->
+																																																																												<div class="mb-3 col-md-6">
+																																																																													<label for="review_form_content">Commentaire :</label>
+																																																																													<textarea name="comment" id="comment" class="form-control"></textarea>
+																																																																												</div>
+																																																																												<!-- Bouton de soumission -->
+																																																																												<div class="mb-3">
+																																																																													<input type="submit" class="btn btn-primary" value="Soumettre">
+																																																																												</div>
+																																																																											</form>
+																																																																								
+																																																																										</div> #}
+
+
 	</div>
+{% endblock %}
+
+{% block javascript %}
+
+	<script>
+		$('.rating i').on('click', function () {
+var value = $(this).data('value');
+$('#rating').val(value);
+$(this).removeClass('far').addClass('fas');
+$(this).prevAll().removeClass('far').addClass('fas');
+$(this).nextAll().removeClass('fas').addClass('far');
+});
+	</script>
+
 
 {% endblock %}
-{% block javascript %}{% endblock %}

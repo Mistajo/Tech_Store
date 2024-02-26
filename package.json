@@ -8,6 +8,8 @@
         "@symfony/webpack-encore": "^4.0.0",
         "bootstrap": "^5.3.2",
         "core-js": "^3.23.0",
+        "jquery": "^3.7.1",
+        "raty": "file:vendor/bower-asset/jquery.raty/jquery.raty.js",
         "regenerator-runtime": "^0.13.9",
         "sass": "^1.70.0",
         "sass-loader": "^13.0.0",
