@@ -373,4 +373,9 @@ class Product
 
         return $this;
     }
+
+    public function decreaseStock(int $quantity)
+    {
+        $this->stock -= $quantity;
+    }
 }

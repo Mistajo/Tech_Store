@@ -36,29 +36,6 @@ class OrderController extends AbstractController
 
 {
 
-    // private function getAuthAssertionValue($clientId, $sellerPayerId)
-    // {
-    //     $header = [
-    //         "alg" => "none",
-    //     ];
-    //     $encodedHeader = $this->base64url(json_encode($header));
-
-    //     $payload = [
-    //         "iss" => $clientId,
-    //         "payer_id" => $sellerPayerId,
-    //     ];
-    //     $encodedPayload = $this->base64url(json_encode($payload));
-
-    //     return "{$encodedHeader}.{$encodedPayload}.";
-    // }
-
-    // private function base64url($json)
-    // {
-    //     $base64 = base64_encode($json);
-    //     $base64url = str_replace(['+', '/', '='], ['-', '_', ''], $base64);
-    //     return $base64url;
-    // }
-
     public function getPaypalClient(): PayPalHttpClient
     {
         $clientId = ($_ENV['Paypal_CLIENT_ID']);
@@ -97,6 +74,11 @@ class OrderController extends AbstractController
             $em->persist($order);
 
             foreach ($cartService->getCart() as $product) {
+
+                if ($product['product']->getStock() < $product['quantity']) {
+                    throw new \Exception("Le stock de {$product['product']->getName()} est insuffisant");
+                }
+
                 $orderProduct = new OrderProduct;
                 $orderProduct->setProduct($product['product'])
                     ->setOrders($order)
@@ -105,6 +87,10 @@ class OrderController extends AbstractController
                     ->setPrice($product['product']->getPrice()) // Utiliser l'objet Product pour récupérer le prix
                     ->setTotalRecap($product['product']->getPrice() * $product['quantity']); // Calculer le total du produit
                 $em->persist($orderProduct);
+                $productEntity = $product['product'];
+                $productEntity->decreaseStock($product['quantity']);
+
+                $em->persist($productEntity);
             }
             try {
                 $em->flush();
@@ -114,10 +100,6 @@ class OrderController extends AbstractController
                 $this->addFlash("warning", "Votre commande n'a pas été validée.");
                 return $this->redirectToRoute('visitor.cart.index');
             }
-
-            // $em->flush();
-
-            // return $this->redirectToRoute('user.order.choice.payment', ['reference' => $reference]);
         }
 
         return $this->render('pages/user/order/index.html.twig', [
