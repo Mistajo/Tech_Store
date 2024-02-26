@@ -1,0 +1,119 @@
+{% extends "themes/base_visitor.html.twig" %}
+
+{% block title %}
+	- Vente de Materiel Informatique
+{% endblock %}
+
+{% block description %}{% endblock %}
+
+{% block keywords %}{% endblock %}
+
+{% block jQuery %}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+
+
+{% block main %}
+
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb mx-3 mt-2 bg-light">
+			<li class="breadcrumb-item">
+				<a href="{{path('visitor.welcome.index')}}">ACCUEIL</a>
+			</li>
+			<li class="breadcrumb-item active text-black" aria-current="page">IMPRIMANTES</li>
+		</ol>
+	</nav>
+
+	<h1 class="text-center my-3 display-5">IMPRIMANTES</h1>
+
+	{% for message in app.flashes('success') %}
+		<div class="text-center alert alert-success alert-dismissible fade show" role="alert">
+			{{message}}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+
+	{% for message in app.flashes('warning') %}
+		<div class="text-center alert alert-warning alert-dismissible fade show" role="alert">
+			{{message}}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+
+
+	<div class="col-md-12 my-5">
+		<div class="row">
+			<div class="col-md-3"></div>
+			{% for product in products %}
+				<div class="col-md-9">
+					<div class="card mb-3">
+						<div class="row g-0">
+							<div class="col-md-3">
+								<a href="{{path('visitor.product_show',{'id':product.id})}}">
+									{% if product.images|length > 0 %}
+										<img src="{{ asset('/uploads/images/thumbnails/' ~ product.images[0].name) }}" class="card-img img-thumbnail" alt="{{ product.name }}">
+									{% endif %}
+								</a>
+							</div>
+							<div class="col-md-7">
+								<div class="card-body">
+									<h5 class="card-title my-2">{{ product.name }}</h5>
+									<p class="card-text my-2">{{ product.shortDescription|striptags|u.truncate(300, '...')|raw }}</p>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="card-body">
+									<p class="card-text my-2">
+										{% if product.stock > 20 %}
+											<div class="form-check green">
+												<input class="form-check-input text-bg-success" type="radio" name="availability-status" id="stock-available" value="available" checked>
+												<label class="form-check-label" for="stock-available">
+													DISPONIBLE
+												</label>
+											</div>
+										{% elseif product.stock == 0 %}
+											<div class="form-check grey">
+												<input class="form-check-input text-bg-light" type="radio" name="availability-status" id="stock-not-available" value="not-available" disabled>
+
+												<label class="form-check-label text-danger" for="stock-not-available">
+													<strong>
+														STOCK EPUISE
+													</strong>
+												</label>
+											</div>
+										{% else %}
+											<div class="form-check red">
+												<input class="form-check-input text-bg-danger" type="radio" name="availability-status" id="stock-limited" value="limited" checked>
+												<label class="form-check-label" for="stock-limited">
+													STOCK LIMITE
+												</label>
+											</div>
+										{% endif %}
+									</p>
+
+									<h5 class="card-title">
+										{{ product.price|format_currency('EUR', locale='fr') }}
+										<small style="font-size: 65%;">TTC</small>
+									</h5>
+									<p class="card-text my-5">
+										<a class=' btn btn-outline-primary d-flex justify-content-center' href="{{path('visitor.product_show',{'id':product.id})}}">VOIR PRODUIT</a>
+										<a class='btn btn-secondary mt-2 w-100 add-to-cart' href="{{path('visitor.cart.product.add',{'id': product.id})}}">AJOUTER AU PANIER</a>
+
+
+									</p>
+
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+
+			{% endfor %}
+
+		</div>
+	</div>
+
+{% endblock %}
+{% block javascript %}{% endblock %}

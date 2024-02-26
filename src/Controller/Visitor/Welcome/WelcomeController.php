@@ -40,7 +40,7 @@ class WelcomeController extends AbstractController
             $this->addFlash('warning', "Il n'y pas de produit dans cette catégorie");
         }
 
-        return $this->render('pages/visitor/welcome/product/pc_portables.html.twig', [
+        return $this->render('pages/visitor/welcome/product/pc_portable.html.twig', [
             'products' => $products,
         ]);
     }
@@ -55,7 +55,7 @@ class WelcomeController extends AbstractController
             $this->addFlash('warning', "Aucun produit dans cette catégorie");
         }
 
-        return $this->render('pages/visitor/product/pc_bureau.html.twig', [
+        return $this->render('pages/visitor/welcome/product/pc_bureau.html.twig', [
             'products' => $products,
         ]);
     }
@@ -71,7 +71,7 @@ class WelcomeController extends AbstractController
         }
 
 
-        return $this->render('pages/visitor/product/ecran.html.twig', [
+        return $this->render('pages/visitor/welcome/product/ecran.html.twig', [
             'products' => $products,
         ]);
     }
@@ -87,12 +87,12 @@ class WelcomeController extends AbstractController
         }
 
 
-        return $this->render('pages/visitor/product/imprimante.html.twig', [
+        return $this->render('pages/visitor/welcome/product/imprimante.html.twig', [
             'products' => $products,
         ]);
     }
 
-    #[Route('/encre-et-toner', name: 'visitor.product_encre_toner.list')]
+    #[Route('/encres-et-toners', name: 'visitor.product_encre_toner.list')]
     public function encresToner(ProductRepository $productRepository)
     {
         $products = $productRepository->findByCategory('Encre et Toner');
@@ -103,7 +103,7 @@ class WelcomeController extends AbstractController
         }
 
 
-        return $this->render('pages/visitor/product/encre_et_toner.html.twig', [
+        return $this->render('pages/visitor/welcome/product/encre_et_toner.html.twig', [
             'products' => $products,
         ]);
     }
@@ -120,7 +120,7 @@ class WelcomeController extends AbstractController
         }
 
 
-        return $this->render('pages/visitor/product/mousse.html.twig', [
+        return $this->render('pages/visitor/welcome/product/mousse.html.twig', [
             'products' => $products,
         ]);
     }
@@ -135,9 +135,19 @@ class WelcomeController extends AbstractController
 
             $this->addFlash('warning', "Aucun produit dans cette catégorie");
         }
+        return $this->render('pages/visitor/welcome/product/keyboard.html.twig', [
+            'products' => $products,
+        ]);
+    }
 
-
-        return $this->render('pages/visitor/product/keyboard.html.twig', [
+    #[Route('/papiers', name: 'visitor.product_papiers.list')]
+    public function papiers(ProductRepository $productRepository,)
+    {
+        $products = $productRepository->findByCategory('Papiers');
+        if (empty($products)) {
+            $this->addFlash('warning', "Aucun produit dans cette catégorie");
+        }
+        return $this->render('pages/visitor/welcome/product/paper.html.twig', [
             'products' => $products,
         ]);
     }
