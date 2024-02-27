@@ -1,0 +1,91 @@
+{% extends 'themes/base_admin.html.twig' %}
+
+
+{% block title %}
+	- Admin - Mon Profil :
+	{{app.user.firstName}}
+	{{app.user.lastName}}
+{% endblock %}
+
+{% block description %}
+	<meta name="description" content="Bienvenue sur la page du profil de l'administrateur. ">
+
+{% endblock %}
+
+{% block jQuery %}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+
+{% block dataTables %}
+	<link href="https://cdn.datatables.net/v/bs5/dt-1.13.6/datatables.min.css" rel="stylesheet">
+	<script src="https://cdn.datatables.net/v/bs5/dt-1.13.6/datatables.min.js"></script>
+{% endblock %}
+
+{% block main %}
+	<h1 class="text-center my-3 display-5">Mon Profil :
+		{{app.user.firstName}}
+		{{app.user.lastName}}</h1>
+
+
+	{% for message in app.flashes('success') %}
+		<div class="text-center alert alert-success alert-dismissible fade show" role="alert">
+			{{message}}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+
+	{% for message in app.flashes('warning') %}
+		<div class="text-center alert alert-warning alert-dismissible fade show" role="alert">
+			{{message}}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+
+	<div class="container mt-5">
+		<div class="row">
+			<div class="col-md-6 mx-auto">
+				{% for message in app.flashes('success') %}
+					<div class="text-center alert alert-success alert-dismissible fade show" role="alert">
+						{{message}}
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+				{% endfor %}
+				<div class="card">
+					<div class="card-header bg-secondary">
+						Profil
+					</div>
+					<div class="card-body">
+						<p class="card-text">
+							<strong>Prénom</strong>
+							:
+							{{app.user.firstName}}</p>
+						<p class="card-text">
+							<strong>Nom</strong>
+							:
+							{{app.user.lastName}}</p>
+						<p class="card-text">
+							<strong>Email</strong>
+							:
+							{{app.user.email}}</p>
+						<p class="card-text">
+							<strong>Adresse</strong>
+							:
+							{{app.user.address}}</p>
+						<p class="card-text">
+							<strong>Ville</strong>
+							:
+							{{app.user.town}}</p>
+						<p class="card-text">
+							<strong>Code Postal</strong>
+							:
+							{{app.user.zipCode}}</p>
+						<a href="{{path('admin.profile.edit')}}" class="m-2 btn btn-primary">Modifier le profil</a>
+						<a href="{{path('admin.profile.edit_password')}}" class="m-2 btn btn-secondary">Modifier le mot de passe</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+{% endblock %}
