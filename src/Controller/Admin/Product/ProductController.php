@@ -2,22 +2,19 @@
 
 namespace App\Controller\Admin\Product;
 
+
+
 use App\Entity\Image;
 use App\Entity\Product;
-use App\Entity\SubCategory;
 use App\Form\ProductFormType;
-use App\Service\FileUploader;
-use App\Service\PictureService;
 use App\Service\ProductService;
 use App\Repository\ImageRepository;
 use App\Repository\ProductRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\SubCategoryRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/admin')]

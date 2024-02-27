@@ -1,3 +1,14 @@
+.cursor-pointer
+{
+  cursor: pointer;
+}
+
+.cursor-pointer:hover
+{
+  text-decoration: underline;
+}
+
+
 html, .T-body
 {
     height: 100%;
