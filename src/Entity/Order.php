@@ -61,10 +61,23 @@ class Order
     #[ORM\Column]
     private ?float $totalPayable = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $status = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $completedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $carriedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $deliveredAt = null;
+
     public function __construct()
     {
         $this->isPaid = false;
         $this->orderProducts = new ArrayCollection();
+        $this->status = 'En attente de confirmation';
     }
 
 
@@ -245,6 +258,54 @@ class Order
     public function setTotalPayable(float $totalPayable): static
     {
         $this->totalPayable = $totalPayable;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getCompletedAt(): ?\DateTimeImmutable
+    {
+        return $this->completedAt;
+    }
+
+    public function setCompletedAt(?\DateTimeImmutable $completedAt): static
+    {
+        $this->completedAt = $completedAt;
+
+        return $this;
+    }
+
+    public function getCarriedAt(): ?\DateTimeImmutable
+    {
+        return $this->carriedAt;
+    }
+
+    public function setCarriedAt(?\DateTimeImmutable $carriedAt): static
+    {
+        $this->carriedAt = $carriedAt;
+
+        return $this;
+    }
+
+    public function getDeliveredAt(): ?\DateTimeImmutable
+    {
+        return $this->deliveredAt;
+    }
+
+    public function setDeliveredAt(?\DateTimeImmutable $deliveredAt): static
+    {
+        $this->deliveredAt = $deliveredAt;
 
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace App\Controller\Admin\Order;
 
 use App\Entity\Order;
+use DateTimeImmutable;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,5 +73,95 @@ class OrderController extends AbstractController
         }
         // on retourne un message de success
         return $this->json(['status' => true, "message" => "La suppression multiple a été effectuée avec succès."]);
+    }
+
+    #[Route('/order/{id}/complete', name: 'admin.order.complete', methods: ['PUT'])]
+    public function complete(Order $order, EntityManagerInterface $em, Request $request): Response
+    {
+        // Si le token est valide
+        if ($this->isCsrfTokenValid('order_complete_' . $order->getId(), $request->request->get('csrf_token'))) {
+            // si  le vehicule est déja disponile
+            if ($order->getStatus() === 'Commande terminée') {
+                // Retirons-le de la liste des orders
+                $order->setStatus('En préparation');
+                // Rendons nulle la date de publication
+                $order->setCompletedAt(null);
+                // Générons le message flash
+                $this->addFlash("success", "La Commande" . " " . $order->getReference() . " " .  "est désormais en préparation.");
+            } else {
+                // Rendons-le disponible dans la liste des vehicules
+                $order->setStatus('Commande terminée');
+                // Générons la date de publication
+                $order->setCompletedAt(new DateTimeImmutable('now'));
+                // Générons le message flash
+                $this->addFlash("success", "La Commande" . " " . $order->getReference() . " " . "est désormais Terminée.");
+            }
+            //Demandons à l'entity manager de préparer la requette
+            $em->persist($order);
+            //Demandons à l'entity manager d'executer la requete
+            $em->flush();
+        }
+        //effectuons une redirection vers la page d'acceuil de la section order
+        return $this->redirectToRoute("admin.order.index");
+    }
+
+    #[Route('/order/{id}/carrie', name: 'admin.order.carrie', methods: ['PUT'])]
+    public function carrie(Order $order, EntityManagerInterface $em, Request $request): Response
+    {
+        // Si le token est valide
+        if ($this->isCsrfTokenValid('order_carrie_' . $order->getId(), $request->request->get('csrf_token'))) {
+            // si  le vehicule est déja disponile
+            if ($order->getStatus() === 'Pris en charge par le transporteur') {
+                // Retirons-le de la liste des orders
+                $order->setStatus('Commande terminée');
+                // Rendons nulle la date de publication
+                $order->setCarriedAt(null);
+                // Générons le message flash
+                $this->addFlash("success", "La Commande" . " " . $order->getReference() . " " .  "est désormais terminée.");
+            } else {
+                // Rendons-le disponible dans la liste des vehicules
+                $order->setStatus('Pris en charge par le transporteur');
+                // Générons la date de publication
+                $order->setCarriedAt(new DateTimeImmutable('now'));
+                // Générons le message flash
+                $this->addFlash("success", "La Commande" . " " . $order->getReference() . " " . "est en cours de livraison.");
+            }
+            //Demandons à l'entity manager de préparer la requette
+            $em->persist($order);
+            //Demandons à l'entity manager d'executer la requete
+            $em->flush();
+        }
+        //effectuons une redirection vers la page d'acceuil de la section order
+        return $this->redirectToRoute("admin.order.index");
+    }
+
+    #[Route('/order/{id}/delivery', name: 'admin.order.delivery', methods: ['PUT'])]
+    public function delivery(Order $order, EntityManagerInterface $em, Request $request): Response
+    {
+        // Si le token est valide
+        if ($this->isCsrfTokenValid('order_delivery_' . $order->getId(), $request->request->get('csrf_token'))) {
+            // si  le vehicule est déja disponile
+            if ($order->getStatus() === 'Livrée') {
+                // Retirons-le de la liste des orders
+                $order->setStatus('Pris en charge par le transporteur');
+                // Rendons nulle la date de publication
+                $order->setDeliveredAt(null);
+                // Générons le message flash
+                $this->addFlash("success", "La Commande" . " " . $order->getReference() . " " .  "est désormais en cours de livraison .");
+            } else {
+                // Rendons-le disponible dans la liste des vehicules
+                $order->setStatus('Livrée');
+                // Générons la date de publication
+                $order->setDeliveredAt(new DateTimeImmutable('now'));
+                // Générons le message flash
+                $this->addFlash("success", "La Commande" . " " . $order->getReference() . " " . "est Livrée.");
+            }
+            //Demandons à l'entity manager de préparer la requette
+            $em->persist($order);
+            //Demandons à l'entity manager d'executer la requete
+            $em->flush();
+        }
+        //effectuons une redirection vers la page d'acceuil de la section order
+        return $this->redirectToRoute("admin.order.index");
     }
 }

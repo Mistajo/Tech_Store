@@ -70,7 +70,8 @@ class OrderController extends AbstractController
                 ->setCarrierName($carrier->getName())
                 ->setCarrierPrice($carrierPrice)
                 ->setAddresses($address)
-                ->setTotalPayable($newtotal);
+                ->setTotalPayable($newtotal)
+                ->setStatus('En préparation');
             $em->persist($order);
 
             foreach ($cartService->getCart() as $product) {

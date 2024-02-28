@@ -61,10 +61,17 @@ order: [
 					<th class='text-center'>Payé?</th>
 					<th class='text-center'>Methode de paiement</th>
 					<th class='text-center'>Numero de paiement</th>
+					<th class='text-center'>Satut De Commande</th>
+					<th class='text-center'>Commande Préparée ?</th>
 					<th class='text-center'>Nom du Transporteur</th>
 					<th class='text-center'>Prix du Transporteur</th>
+					<th class='text-center'>En Cours de Livraison</th>
 					<th class='text-center'>Montant Total de la commande</th>
+					<th class='text-center'>Commande Livrée ?</th>
 					<th class='text-center'>Date de Commande</th>
+					<th class='text-center'>Date de Fin De Preparation</th>
+					<th class='text-center'>Prise en Charge Par le Transporteur</th>
+					<th class='text-center'>Date de Livraison</th>
 					<th class='text-center'>Options</th>
 				</tr>
 			</thead>
@@ -105,18 +112,79 @@ order: [
 						{% else %}
 							<td>N/A</td>
 						{% endif %}
+						<td>{{order.status}}</td>
+						<td>
+							{% if order.status is same as('Commande terminée') %}
+								<p>
+									Terminée le
+									{{ order.completedAt|date('d-m-Y H:i:s') }}
+								</p>
+							{% else %}
+								<p>
+									Pas encore.
+								</p>
+							{% endif %}
+							<form method="POST" action="{{ path('admin.order.complete', {'id': order.id}) }}">
+								<div class="form-check form-switch d-flex justify-content-center align-items-center">
+									<input onclick="return confirm('Confirmer cette action?')" onchange="this.form.submit()" {{ order.status is same as('Commande terminée') ? 'checked' : '' }} class="form-check-input" type="checkbox" role="switch" id="switch_{{order.id}}">
+									<label class="form-check-label" for="switch_{{order.id}}"></label>
+									<input type="hidden" name="csrf_token" value="{{ csrf_token('order_complete_' ~ order.id) }}">
+									<input type="hidden" name="_method" value="PUT">
+								</div>
+							</form>
+						</td>
 
 						<td>{{order.carrier.name}}</td>
 						<td>{{order.carrier.price|format_currency('EUR', locale='fr')}}</td>
+						<td>
+							{% if order.status is same as('Pris en charge par le transporteur') %}
 
-
+								<p>
+									En Cours de Livraison Depuis le
+									{{ order.carriedAt|date('d-m-Y H:i:s') }}
+								</p>
+							{% else %}
+								<p>
+									Pas encore.
+								</p>
+							{% endif %}
+							<form method="POST" action="{{ path('admin.order.carrie', {'id': order.id}) }}">
+								<div class="form-check form-switch d-flex justify-content-center align-items-center">
+									<input onclick="return confirm('Confirmer cette action?')" onchange="this.form.submit()" {{ order.status is same as('Pris en charge par le transporteur') ? 'checked' : '' }} class="form-check-input" type="checkbox" role="switch" id="switch_{{order.id}}">
+									<label class="form-check-label" for="switch_{{order.id}}"></label>
+									<input type="hidden" name="csrf_token" value="{{ csrf_token('order_carrie_' ~ order.id) }}">
+									<input type="hidden" name="_method" value="PUT">
+								</div>
+							</form>
+						</td>
 						<td>{{order.totalPayable|number_format('2', '.', ' ')}}
 							€</td>
+						<td>
+							{% if order.status is same as('Livrée') %}
 
+								<p>
+									Livrée le
+									{{ order.deliveredAt|date('d-m-Y H:i:s') }}
+								</p>
+							{% else %}
+								<p>
+									Pas encore.
+								</p>
+							{% endif %}
+							<form method="POST" action="{{ path('admin.order.delivery', {'id': order.id}) }}">
+								<div class="form-check form-switch d-flex justify-content-center align-items-center">
+									<input onclick="return confirm('Confirmer cette action?')" onchange="this.form.submit()" {{ order.status is same as('Livrée') ? 'checked' : '' }} class="form-check-input" type="checkbox" role="switch" id="switch_{{order.id}}">
+									<label class="form-check-label" for="switch_{{order.id}}"></label>
+									<input type="hidden" name="csrf_token" value="{{ csrf_token('order_delivery_' ~ order.id) }}">
+									<input type="hidden" name="_method" value="PUT">
+								</div>
+							</form>
+						</td>
 
 						<td>{{order.createdAt|date('d-m-Y H:i:s')}}</td>
-
-
+						<td>{{order.completedAt|date('d-m-Y H:i:s')}}</td>
+						<td>{{order.carriedAt|date('d-m-Y H:i:s')}}</td>
+						<td>{{order.deliveredAt|date('d-m-Y H:i:s')}}</td>
 						<td>
 							<a onclick="event.preventDefault(); return confirm('Attention!! Supprimer cette commande. Continuer ?') && document.querySelector('#form_delete_order_{{order.id}}').submit();" title="Supprimer" href="#" class="text-danger m-2">
 								<i class="fa-solid fa-trash-can"></i>
