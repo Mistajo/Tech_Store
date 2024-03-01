@@ -2,7 +2,7 @@
 	<div class="container-fluid">
 
 		<a class="navbar-brand col-md-3 col-lg-2 my-1 fs-6 ms-auto" href="{{path('visitor.welcome.index')}}">
-			<img class=" w-75 h-75 ms-auto rounded-4" src="{{asset("logo/Tech_Store_Logo.png")}}" alt="Tech Store logo">
+			<img class=" img-fluid ms-auto rounded-4" src="{{asset("logo/Tech_Store_Logo.png")}}" alt="Tech Store logo">
 		</a>
 
 		<button class="navbar-toggler bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,7 +93,7 @@
 												{{app.user.firstName}}</h4>
 
 											<li>
-												<a class="dropdown-item text-primary" href="#">Mon Profil</a>
+												<a class="dropdown-item text-primary" href="{{path('admin.profile.index')}}">Mon Profil</a>
 
 											</li>
 											<li>
@@ -101,7 +101,7 @@
 
 											</li>
 											<li>
-												<a class="dropdown-item text-primary" href="#">Paramètre du Site</a>
+												<a class="dropdown-item text-primary" href="{{path('admin.setting.index')}}">Paramètre du Site</a>
 
 											</li>
 										{% elseif is_granted('ROLE_USER') %}

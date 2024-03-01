@@ -95,6 +95,39 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Review::class)]
     private Collection $reviews;
 
+    #[Assert\NotBlank(message: "Le nom de la marque est obligatoire.")]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'Le nom de la marque doit contenir au maximum {{ limit }} caractères.',
+    )]
+    #[Assert\Regex(
+        pattern: "/^[0-9a-zA-Z\-\_\'\ áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]+$/i",
+        match: true,
+        message: 'Le nom de la marque doit contenir uniquement des lettres, des chiffres le tiret du milieu de l\'undescore.',
+    )]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $brand = null;
+
+
+    #[Assert\Regex(
+        pattern: "/[0-9]{1,}[.,]{0,1}[0-9]{0,2}/",
+        match: true,
+        message: 'La taille de la RAM doit contenir uniquement des chiffres et un point.',
+    )]
+    #[ORM\Column(type: Types::BIGINT, nullable: true)]
+    private ?string $ram = null;
+
+
+    #[Assert\Regex(
+        pattern: "/[0-9]{1,}[.,]{0,1}[0-9]{0,2}/",
+        match: true,
+        message: 'La taille du disque dur doit contenir uniquement des chiffres et un point.',
+    )]
+    #[ORM\Column(type: Types::BIGINT, nullable: true)]
+    private ?string $hardDisk = null;
+
+
+
 
     public function __construct()
     {
@@ -377,5 +410,41 @@ class Product
     public function decreaseStock(int $quantity)
     {
         $this->stock -= $quantity;
+    }
+
+    public function getBrand(): ?string
+    {
+        return $this->brand;
+    }
+
+    public function setBrand(?string $brand): static
+    {
+        $this->brand = $brand;
+
+        return $this;
+    }
+
+    public function getRam(): ?string
+    {
+        return $this->ram;
+    }
+
+    public function setRam(?string $ram): static
+    {
+        $this->ram = $ram;
+
+        return $this;
+    }
+
+    public function getHardDisk(): ?string
+    {
+        return $this->hardDisk;
+    }
+
+    public function setHardDisk(?string $hardDisk): static
+    {
+        $this->hardDisk = $hardDisk;
+
+        return $this;
     }
 }

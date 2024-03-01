@@ -19,10 +19,10 @@
 {% block slick %}
 	<!-- Add the slick-theme.css if you want default styling -->
 	<link
-	rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+	rel="stylesheet" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 	<!-- Add the slick-theme.css if you want default styling -->
-	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
-	<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+	<script src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 	<script>
 		$(document).ready(function () {
 $('.carousel').slick({
@@ -50,7 +50,6 @@ $(this).nextAll().removeClass('fas').addClass('far');
 });
 });
 	</script>
-
 {% endblock %}
 
 
@@ -85,6 +84,7 @@ $(this).nextAll().removeClass('fas').addClass('far');
 			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 		</div>
 	{% endfor %}
+
 	{% for message in app.flashes('error') %}
 		<div class="text-center alert alert-danger alert-dismissible fade show" role="alert">
 			{{message}}
@@ -96,19 +96,21 @@ $(this).nextAll().removeClass('fas').addClass('far');
 	<div class="container">
 
 		<div class="row mt-5">
-			<div class="col-md-6">
+			<div class="col-md-6 col-sm-6 col-lg-6">
+
 				<div class="product-images">
 					<div class="carousel">
 						{% for image in product.images %}
-							<div>
-								<img src="{{ asset('/uploads/images/' ~ image.name) }}" class="d-block w-100" alt="{{ product.name }}">
+							<div class="col-md-6 col-sm-6 col-lg-6">
+
+								<img src="{{ asset('/uploads/images/' ~ image.name) }}" class="d-block img-fluid" alt="{{ product.name }}">
 							</div>
 						{% endfor %}
 					</div>
 					<div class="carousel-nav border-5">
 						{% for image in product.images %}
 							<div class=' border border-black mx-2 d-flex justify-content-center'>
-								<img src="{{ asset('/uploads/images/thumbnails/' ~ image.name) }}" class="w-50" alt="{{ product.name }}">
+								<img src="{{ asset('/uploads/images/thumbnails/' ~ image.name) }}" class="w-50 img-fluid" alt="{{ product.name }}">
 							</div>
 						{% endfor %}
 					</div>
@@ -204,31 +206,31 @@ $(this).nextAll().removeClass('fas').addClass('far');
 		</div>
 		<hr>
 		{# <div class="row mt-5">
-																																																																																																			<h3>Donner Votre avis</h3>
-																																																																																																			<form
-																																																																																																				id="product_review_form" method="POST" action="{{ path('visitor.product_show', {'id': product.id}) }}">
-																																																																																																
-																																																																																																				<!-- Champ pour la note -->
-																																																																																																				<div class="rating">
-																																																																																																					<i class="far fa-star" data-value="1"></i>
-																																																																																																					<i class="far fa-star" data-value="2"></i>
-																																																																																																					<i class="far fa-star" data-value="3"></i>
-																																																																																																					<i class="far fa-star" data-value="4"></i>
-																																																																																																					<i class="far fa-star" data-value="5"></i>
-																																																																																																					<input type="hidden" name="rating" id="rating" value="0">
-																																																																																																				</div>
-																																																																																																				<!-- Champ pour le commentaire -->
-																																																																																																				<div class="mb-3 col-md-6">
-																																																																																																					<label for="review_form_content">Commentaire :</label>
-																																																																																																					<textarea name="comment" id="comment" class="form-control"></textarea>
-																																																																																																				</div>
-																																																																																																				<!-- Bouton de soumission -->
-																																																																																																				<div class="mb-3">
-																																																																																																					<input type="submit" class="btn btn-primary" value="Soumettre">
-																																																																																																				</div>
-																																																																																																			</form>
-																																																																																																
-																																																																																																		</div> #}
+																																																																																																																							<h3>Donner Votre avis</h3>
+																																																																																																																							<form
+																																																																																																																								id="product_review_form" method="POST" action="{{ path('visitor.product_show', {'id': product.id}) }}">
+																																																																																																																				
+																																																																																																																								<!-- Champ pour la note -->
+																																																																																																																								<div class="rating">
+																																																																																																																									<i class="far fa-star" data-value="1"></i>
+																																																																																																																									<i class="far fa-star" data-value="2"></i>
+																																																																																																																									<i class="far fa-star" data-value="3"></i>
+																																																																																																																									<i class="far fa-star" data-value="4"></i>
+																																																																																																																									<i class="far fa-star" data-value="5"></i>
+																																																																																																																									<input type="hidden" name="rating" id="rating" value="0">
+																																																																																																																								</div>
+																																																																																																																								<!-- Champ pour le commentaire -->
+																																																																																																																								<div class="mb-3 col-md-6">
+																																																																																																																									<label for="review_form_content">Commentaire :</label>
+																																																																																																																									<textarea name="comment" id="comment" class="form-control"></textarea>
+																																																																																																																								</div>
+																																																																																																																								<!-- Bouton de soumission -->
+																																																																																																																								<div class="mb-3">
+																																																																																																																									<input type="submit" class="btn btn-primary" value="Soumettre">
+																																																																																																																								</div>
+																																																																																																																							</form>
+																																																																																																																				
+																																																																																																																						</div> #}
 
 
 	</div>

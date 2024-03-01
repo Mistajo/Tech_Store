@@ -167,7 +167,7 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/encre-et-toner', name: 'admin.product_encre_toner.list')]
+    #[Route('/encres-et-toners', name: 'admin.product_encre_toner.list')]
     public function encresToner(ProductRepository $productRepository)
     {
         $products = $productRepository->findByCategory('Encre et Toner');
@@ -213,6 +213,23 @@ class ProductController extends AbstractController
 
 
         return $this->render('pages/admin/product/keyboard.html.twig', [
+            'products' => $products,
+        ]);
+    }
+
+    #[Route('/papiers', name: 'admin.product_paper.list')]
+    public function papiers(ProductRepository $productRepository,)
+    {
+        $products = $productRepository->findByCategory('Papiers');
+
+
+        if (empty($products)) {
+
+            $this->addFlash('warning', "Aucun produit dans cette catégorie");
+        }
+
+
+        return $this->render('pages/admin/product/paper.html.twig', [
             'products' => $products,
         ]);
     }

@@ -71,45 +71,78 @@ $('#product_form_subCategories').select2();
 							{{ form_widget(form.stock, {'attr' : {'class': 'form-control'}}) }}
 						</div>
 					</div>
-					<div class="mb-3">
-						<label for="product_form_image">Image :</label>
-						{# on affiche le message d'erreur du nom #}
-						<div class="text-danger">{{ form_errors(form.images) }}</div>
-						{{ form_widget(form.images, {'attr' : {'class': 'form-control'}}) }}
-					</div>
-
-
-					<div class="row">
-						<div class="col-md-6">
-							<div class="mb-3">
-								<label for="product_form_shortdescription">Description Courte :</label>
-								{# on affiche le message d'erreur pour le prénom #}
-								<div class="text-danger">{{ form_errors(form.shortDescription) }}</div>
-								{# on mets en form l'input du prénom #}
-								{{ form_widget(form.shortDescription,{'attr' : {'class': 'form-control'}}) }}
-							</div>
-						</div>
-
-
-						<div class="col-md-6">
-							<div class="mb-3">
-								<label for="product_form_stock">Description Longue :</label>
-								{# on affiche le message d'erreur du nom #}
-								<div class="text-danger">{{ form_errors(form.longDescription) }}</div>
-								{{ form_widget(form.longDescription, {'attr' : {'class': 'form-control'}}) }}
-							</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="mb-3">
+							<label for="product_form_image">Image :</label>
+							{# on affiche le message d'erreur du nom #}
+							<div class="text-danger">{{ form_errors(form.images) }}</div>
+							{{ form_widget(form.images, {'attr' : {'class': 'form-control'}}) }}
 						</div>
 					</div>
-
-					<div class="mb-3 text-center">
-						<input formnovalidate type="submit" class="btn btn-primary" value="Créer">
+					<div class="col-md-6">
+						<div class="mb-3">
+							<label for="product_form_brand">Marque :</label>
+							{# on affiche le message d'erreur du nom #}
+							<div class="text-danger">{{ form_errors(form.brand) }}</div>
+							{{ form_widget(form.brand, {'attr' : {'class': 'form-control'}}) }}
+						</div>
 					</div>
-
-					{{ form_end(form) }}
 				</div>
 
+
+				<div class="row">
+					<div class="col-md-6">
+						<div class="mb-3">
+							<label for="product_form_shortdescription">Description Courte :</label>
+							{# on affiche le message d'erreur pour le prénom #}
+							<div class="text-danger">{{ form_errors(form.shortDescription) }}</div>
+							{# on mets en form l'input du prénom #}
+							{{ form_widget(form.shortDescription,{'attr' : {'class': 'form-control'}}) }}
+						</div>
+					</div>
+
+					<div class="col-md-6">
+						<div class="mb-3">
+							<label for="product_form_stock">Description Longue :</label>
+							{# on affiche le message d'erreur du nom #}
+							<div class="text-danger">{{ form_errors(form.longDescription) }}</div>
+							{{ form_widget(form.longDescription, {'attr' : {'class': 'form-control'}}) }}
+						</div>
+					</div>
+				</div>
+
+
+				<div class="row">
+					<div class="col-md-6">
+						<div class="mb-3">
+							<label for="product_form_ram">Taille De La Mémoire RAM :</label>
+							{# on affiche le message d'erreur pour le prénom #}
+							<div class="text-danger">{{ form_errors(form.ram) }}</div>
+							{# on mets en form l'input du prénom #}
+							{{ form_widget(form.ram,{'attr' : {'class': 'form-control'}}) }}
+						</div>
+					</div>
+
+					<div class="col-md-6">
+						<div class="mb-3">
+							<label for="product_form_hardDisk">Taille Du Disque Dur :</label>
+							<div class="text-danger">{{ form_errors(form.hardDisk) }}</div>
+							{{ form_widget(form.hardDisk, {'attr' : {'class': 'form-control'}}) }}
+						</div>
+					</div>
+				</div>
+
+				<div class="mb-3 text-center">
+					<input formnovalidate type="submit" class="btn btn-primary" value="Créer">
+				</div>
+
+				{{ form_end(form) }}
 			</div>
 
 		</div>
-	{% endblock %}
-	{% block javascripts %}{% endblock %}
+
+	</div>
+{% endblock %}
+{% block javascripts %}{% endblock %}

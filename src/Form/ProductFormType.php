@@ -44,6 +44,9 @@ class ProductFormType extends AbstractType
                 'currency' => 'EUR',
             ])
             ->add('name', TextType::class)
+            ->add('brand', TextType::class)
+            ->add('ram', NumberType::class)
+            ->add('hardDisk', NumberType::class)
             ->add('stock', NumberType::class)
             ->add('shortDescription', TextareaType::class)
             ->add('longDescription', TextareaType::class);

@@ -62,6 +62,7 @@ order: [
 					<th class='text-center'>Id</th>
 					<th class='text-center'>Image</th>
 					<th class='text-center'>Nom</th>
+					<th class='text-center'>Slug</th>
 					<th class='text-center'>Contenu</th>
 					<th class='text-center'>Créé le</th>
 					<th class='text-center'>Modifiée le</th>
@@ -80,6 +81,7 @@ order: [
 							{% endif %}
 						</td>
 						<td>{{payment.title}}</td>
+						<td>{{payment.slug}}</td>
 						<td>{{payment.content}}</td>
 
 						<td>{{payment.createdAt|date('d-m-Y H:i:s')}}</td>
