@@ -68,6 +68,23 @@ class PcPortablesFixtures extends Fixture
         $image21 = new Image();
         $image21->setName("943fdeb298dace104eb401c1fad2dcaa.jpg");
 
+        $image22 = new Image();
+        $image22->setName("20ce8bad9ff24da29daddae6d94b589a.jpg");
+        $image23 = new Image();
+        $image23->setName("35a3116307bb67594f899aea4eaacff6.jpg");
+        $image24 = new Image();
+        $image24->setName("9550ca099225a8d6e6a629b8b302ebdd.jpg");
+
+        $image25 = new Image();
+        $image25->setName("0a346186eedc84953d12bc0ba8c501ac.jpg");
+        $image26 = new Image();
+        $image26->setName("201628cfcc308cb378fd4e3b57833b0b.jpg");
+        $image27 = new Image();
+        $image27->setName("c61459c7d979ec6e06a2ff19f3aa397a.jpg");
+        $image28 = new Image();
+        $image28->setName("cdec3e04188172a303eaa084c78c316b.jpg");
+
+
 
 
         $pcportable = new Product();
@@ -137,7 +154,6 @@ class PcPortablesFixtures extends Fixture
         $image15->setProduct($pcportable2);
         $image16->setProduct($pcportable2);
 
-
         $pcportable3 = new Product();
         $pcportable3->addCategory($category);
         $pcportable3->setName("Dell Inspiron 14 5430 Ordinateur Portable, Processeur Intel Core i5-1335U, Écran 14 1610 FHD+, 8Go RAM, 512Go SSD, Graphique Intel Iris XE, Windows 11 ");
@@ -160,13 +176,51 @@ class PcPortablesFixtures extends Fixture
         $image20->setProduct($pcportable3);
         $image21->setProduct($pcportable3);
 
+        $pcportable4 = new Product();
+        $pcportable4->addCategory($category);
+        $pcportable4->setName("(2019) Apple MacBook Pro 13, Core i5 8Go 256Go SSD Retina Touch ID Touch Bar");
+        $pcportable4->setPrice(739);
+        $pcportable4->setStock(25);
+        $pcportable4->setBrand("APPLE");
+        $pcportable4->setShortDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+        $pcportable4->setLongDescription("praesent elementum facilisis leo vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet massa vitae tortor condimentum lacinia quis vel eros donec ac odio tempor orci dapibus ultrices in iaculis nunc sed augue lacus viverra vitae congue eu consequat ac felis donec et odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur vitae nunc sed velit dignissim sodales ut eu sem integer vitae justo eget magna fermentum");
+        $pcportable4->setRam(8);
+        $pcportable4->setHardDisk(256);
+        $pcportable4->addImage($image22);
+        $pcportable4->addImage($image23);
+        $pcportable4->addImage($image24);
 
+        $image22->setProduct($pcportable4);
+        $image23->setProduct($pcportable4);
+        $image24->setProduct($pcportable4);
+
+        $pcportable5 = new Product();
+        $pcportable5->addCategory($category);
+        $pcportable5->setName("Apple 2022 MacBook Air avec Puce M2  écran Liquid Retina de 13,6 Pouces, 8GB de RAM, 256 Go de Stockage SSD ; Argent");
+        $pcportable5->setPrice(1499.00);
+        $pcportable5->setStock(15);
+        $pcportable5->setBrand("APPLE");
+        $pcportable5->setShortDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+        $pcportable5->setLongDescription("praesent elementum facilisis leo vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet massa vitae tortor condimentum lacinia quis vel eros donec ac odio tempor orci dapibus ultrices in iaculis nunc sed augue lacus viverra vitae congue eu consequat ac felis donec et odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur vitae nunc sed velit dignissim sodales ut eu sem integer vitae justo eget magna fermentum");
+        $pcportable5->setRam(8);
+        $pcportable5->setHardDisk(512);
+        $pcportable5->addImage($image25);
+        $pcportable5->addImage($image26);
+        $pcportable5->addImage($image27);
+        $pcportable5->addImage($image28);
+
+        $image25->setProduct($pcportable5);
+        $image26->setProduct($pcportable5);
+        $image27->setProduct($pcportable5);
+        $image28->setProduct($pcportable5);
 
         $manager->persist($category);
         $manager->persist($pcportable);
         $manager->persist($pcportable1);
         $manager->persist($pcportable2);
         $manager->persist($pcportable3);
+        $manager->persist($pcportable4);
+        $manager->persist($pcportable5);
         $manager->persist($image1);
         $manager->persist($image2);
         $manager->persist($image3);
