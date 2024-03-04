@@ -58,7 +58,7 @@
 							</div>
 							<div class="col-md-7">
 								<div class="card-body">
-									<h5 class="card-title my-2">{{ product.name }}</h5>
+									<h5 class="card-title my-2">{{ product.name|upper|raw }}</h5>
 									<p class="card-text my-2">{{ product.shortDescription|striptags|u.truncate(300, '...')|raw }}</p>
 								</div>
 							</div>

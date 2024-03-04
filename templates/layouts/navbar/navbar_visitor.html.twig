@@ -10,8 +10,7 @@
 		</button>
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<ul class="navbar-nav mb-2 mb-lg-0">
-
+			<ul class="navbar-nav mx-auto">
 				<li class="nav-item">
 					<a class="nav-link active" aria-current="page" href="{{path('visitor.product_pc_portables.list')}}">PC Portables</a>
 				</li>
@@ -49,22 +48,23 @@
 					</ul>
 				</li>
 				{# --------------------------------------------------- #}
-				<form class="d-flex ms-5 " role="search">
-					<input class="form-control me-2" type="search" placeholder="Que cherchez-vous?" aria-label="Search">
-					<div class='d-flex'>
-						<button class="btn btn-outline-success text-white mx-1" type="submit">
-							<i class="fa-solid fa-magnifying-glass" title='Rechercher'></i>
-						</button>
-						<button class="btn btn-outline-danger text-white mx-1" type="submit">
-							<i class="fa-solid fa-delete-left" title="Effacer"></i>
-						</button>
-					</div>
-				</form>
-
+				<li>
+					<form class="d-flex" role="search">
+						<input class="form-control me-2" type="search" placeholder="Que cherchez-vous?" aria-label="Search">
+						<div class='d-flex'>
+							<button class="btn btn-outline-success text-white mx-1" type="submit">
+								<i class="fa-solid fa-magnifying-glass" title='Rechercher'></i>
+							</button>
+							{# <button class="btn btn-outline-danger text-white mx-1" type="submit">
+																																				<i class="fa-solid fa-delete-left" title="Effacer"></i>
+																																			</button> #}
+						</div>
+					</form>
+				</li>
 			</ul>
 
 
-			<div class="ms-auto">
+			<div class="mx-auto">
 				<ul class="navbar-nav me-3">
 					<li class="nav-item dropdown me-3">
 						<a href="#" class="nav-link text-white" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">

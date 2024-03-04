@@ -34,10 +34,11 @@
 
 
 		<section class="row">
-			<div class="col-12">
+			<div class="col-12 ">
 				<h1 class='text-center my-3 display-5'>Votre Panier</h1>
 
-				<table class="table">
+				<table class="table table-responsive-sm">
+
 					<thead>
 						<tr class='text-center'>
 							<th>#</th>
@@ -62,7 +63,8 @@
 
 								<td>{{ item.product.name }}</td>
 								<td>{{ item.quantity }}</td>
-								<td>{{ (item.product.price)|number_format('2', '.', ' ')|format_currency('EUR', locale='fr')}}
+								<td>{{ (item.product.price)|number_format('2', '.', ' ')}}
+									€
 								</td>
 
 								<td>{{ (item.quantity * item.product.price)|number_format('2', '.', ' ')}}
@@ -111,7 +113,7 @@
 					</tfoot>
 				</table>
 				{% if cart|length > 0 %}
-					<a href="{{ path('user.order.create') }}" class="btn btn-primary">Valider le panier</a>
+					<a href="{{ path('user.order.create') }}" class="btn btn-primary mt-3">Valider le panier</a>
 				{% endif %}
 
 
