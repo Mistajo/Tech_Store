@@ -14,7 +14,7 @@ class CategoryFixtures extends Fixture
         // $manager->persist($product);
 
 
-        $category1 = $this->createPcBureau();
+
         $category2 = $this->createEcrans();
         $category3 = $this->createImprimantes();
         $category4 = $this->createEncreToner();
@@ -24,7 +24,7 @@ class CategoryFixtures extends Fixture
 
 
 
-        $manager->persist($category1);
+
         $manager->persist($category2);
         $manager->persist($category3);
         $manager->persist($category4);
@@ -38,14 +38,6 @@ class CategoryFixtures extends Fixture
     }
 
 
-    private function createPcBureau(): Category
-    {
-        $category1 = new Category();
-        $category1->setName("PC de Bureau");
-        $category1->setImage("Pc_de_bureau.png");
-        $category1->setDescription("Les meilleures performances pour le divertissement personnel et familial");
-        return $category1;
-    }
 
     private function createEcrans(): Category
     {

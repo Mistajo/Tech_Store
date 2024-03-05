@@ -102,14 +102,14 @@ $(this).nextAll().removeClass('fas').addClass('far');
 					<div class="carousel">
 						{% for image in product.images %}
 							<div class="col-md-6 col-sm-6 col-lg-6">
-								<img src="{{ asset('/uploads/images/' ~ image.name) }}" class="d-block img-fluid" alt="{{ product.name }}">
+								<img src="{{ asset('/uploads/images/' ~ image.name) }}" class="d-block img-fluid text-center mx-auto" style="object-fit: cover; height: 300px" alt="{{ product.name }}">
 							</div>
 						{% endfor %}
 					</div>
-					<div class="carousel-nav border-5 ">
+					<div class="carousel-nav border-5">
 						{% for image in product.images %}
-							<div class=' border border-black d-flex justify-content-center'>
-								<img src="{{ asset('/uploads/images/thumbnails/' ~ image.name) }}" class="w-50 img-fluid" alt="{{ product.name }}">
+							<div class=' border border-black '>
+								<img src="{{ asset('/uploads/images/thumbnails/' ~ image.name) }}" class="w-50 img-fluid mx-auto" alt="{{ product.name }}">
 							</div>
 						{% endfor %}
 					</div>
@@ -206,31 +206,31 @@ $(this).nextAll().removeClass('fas').addClass('far');
 		</div>
 		<hr>
 		{# <div class="row mt-5">
-																																																																																																																																					<h3>Donner Votre avis</h3>
-																																																																																																																																					<form
-																																																																																																																																						id="product_review_form" method="POST" action="{{ path('visitor.product_show', {'id': product.id}) }}">
-																																																																																																																																		
-																																																																																																																																						<!-- Champ pour la note -->
-																																																																																																																																						<div class="rating">
-																																																																																																																																							<i class="far fa-star" data-value="1"></i>
-																																																																																																																																							<i class="far fa-star" data-value="2"></i>
-																																																																																																																																							<i class="far fa-star" data-value="3"></i>
-																																																																																																																																							<i class="far fa-star" data-value="4"></i>
-																																																																																																																																							<i class="far fa-star" data-value="5"></i>
-																																																																																																																																							<input type="hidden" name="rating" id="rating" value="0">
-																																																																																																																																						</div>
-																																																																																																																																						<!-- Champ pour le commentaire -->
-																																																																																																																																						<div class="mb-3 col-md-6">
-																																																																																																																																							<label for="review_form_content">Commentaire :</label>
-																																																																																																																																							<textarea name="comment" id="comment" class="form-control"></textarea>
-																																																																																																																																						</div>
-																																																																																																																																						<!-- Bouton de soumission -->
-																																																																																																																																						<div class="mb-3">
-																																																																																																																																							<input type="submit" class="btn btn-primary" value="Soumettre">
-																																																																																																																																						</div>
-																																																																																																																																					</form>
-																																																																																																																																		
-																																																																																																																																				</div> #}
+																																																																																																																																																																	<h3>Donner Votre avis</h3>
+																																																																																																																																																																	<form
+																																																																																																																																																																		id="product_review_form" method="POST" action="{{ path('visitor.product_show', {'id': product.id}) }}">
+																																																																																																																																																														
+																																																																																																																																																																		<!-- Champ pour la note -->
+																																																																																																																																																																		<div class="rating">
+																																																																																																																																																																			<i class="far fa-star" data-value="1"></i>
+																																																																																																																																																																			<i class="far fa-star" data-value="2"></i>
+																																																																																																																																																																			<i class="far fa-star" data-value="3"></i>
+																																																																																																																																																																			<i class="far fa-star" data-value="4"></i>
+																																																																																																																																																																			<i class="far fa-star" data-value="5"></i>
+																																																																																																																																																																			<input type="hidden" name="rating" id="rating" value="0">
+																																																																																																																																																																		</div>
+																																																																																																																																																																		<!-- Champ pour le commentaire -->
+																																																																																																																																																																		<div class="mb-3 col-md-6">
+																																																																																																																																																																			<label for="review_form_content">Commentaire :</label>
+																																																																																																																																																																			<textarea name="comment" id="comment" class="form-control"></textarea>
+																																																																																																																																																																		</div>
+																																																																																																																																																																		<!-- Bouton de soumission -->
+																																																																																																																																																																		<div class="mb-3">
+																																																																																																																																																																			<input type="submit" class="btn btn-primary" value="Soumettre">
+																																																																																																																																																																		</div>
+																																																																																																																																																																	</form>
+																																																																																																																																																														
+																																																																																																																																																																</div> #}
 
 
 	</div>
